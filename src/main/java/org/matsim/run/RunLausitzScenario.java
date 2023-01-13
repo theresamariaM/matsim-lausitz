@@ -24,7 +24,7 @@ import picocli.CommandLine;
 import javax.annotation.Nullable;
 import java.util.List;
 
-@CommandLine.Command(header = ":: Open Template Scenario ::", version = RunTemplateScenario.VERSION, mixinStandardHelpOptions = true)
+@CommandLine.Command(header = ":: Open Lausitz Scenario ::", version = RunLausitzScenario.VERSION, mixinStandardHelpOptions = true)
 @MATSimApplication.Prepare({
 		CreateNetworkFromSumo.class, CreateTransitScheduleFromGtfs.class, TrajectoryToPlans.class, GenerateShortDistanceTrips.class,
 		MergePopulations.class, ExtractRelevantFreightTrips.class, DownSamplePopulation.class, ExtractHomeCoordinates.class,
@@ -33,26 +33,24 @@ import java.util.List;
 @MATSimApplication.Analysis({
 		TravelTimeAnalysis.class, LinkStats.class, CheckPopulation.class
 })
-// FIXME: Rename scenario
-public class RunTemplateScenario extends MATSimApplication {
+public class RunLausitzScenario extends MATSimApplication {
 
 	static final String VERSION = "1.0";
 
 	@CommandLine.Mixin
-	private final SampleOptions sample = new SampleOptions(25, 10, 1);
+	private final SampleOptions sample = new SampleOptions(100, 25, 1);
 
 
-	public RunTemplateScenario(@Nullable Config config) {
+	public RunLausitzScenario(@Nullable Config config) {
 		super(config);
 	}
 
-	// FIXME: update config path
-	public RunTemplateScenario() {
-		super(String.format("input/v%s/template-v%s-25pct.config.xml", VERSION, VERSION));
+	public RunLausitzScenario() {
+		super(String.format("input/v%s/lausitz-v%s-100pct.config.xml", VERSION, VERSION));
 	}
 
 	public static void main(String[] args) {
-		MATSimApplication.run(RunTemplateScenario.class, args);
+		MATSimApplication.run(RunLausitzScenario.class, args);
 	}
 
 	@Nullable

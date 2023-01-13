@@ -26,7 +26,7 @@
 
 	<properties>
 		<!-- FIXME: change main class -->
-		<main.class>org.matsim.run.RunTemplateScenario</main.class>
+		<main.class>org.matsim.run.RunLausitzScenario</main.class>
 
 		<!-- Don't modify, will use the same version as parent -->
 		<matsim.version>${project.parent.version}</matsim.version>
@@ -183,7 +183,6 @@
 				</dependencies>
 				<configuration>
 					<configLocation>checkstyle.xml</configLocation>
-					<encoding>UTF-8</encoding>
 					<consoleOutput>true</consoleOutput>
 					<failsOnError>true</failsOnError>
 					<failOnViolation>true</failOnViolation>

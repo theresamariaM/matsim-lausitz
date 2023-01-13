@@ -115,7 +115,7 @@ public class RunLausitzScenario extends MATSimApplication {
 
 			// allow freight traffic together with cars
 			if (modes.contains("car")) {
-				HashSet<String> newModes = Sets.newHashSet(modes);
+				Set<String> newModes = Sets.newHashSet(modes);
 				newModes.add("freight");
 
 				link.setAllowedModes(newModes);

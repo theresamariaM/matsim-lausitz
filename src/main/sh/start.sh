@@ -10,4 +10,4 @@ export RUN_NAME="$name"
 echo "Starting run kh-$name"
 echo "$*"
 
-qsub -V -N matsim-"$name" job.sh
+qsub -V -N lausitz-"$name" job.sh

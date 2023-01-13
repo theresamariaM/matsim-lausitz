@@ -3,9 +3,9 @@
 #$ -j y
 #$ -m a
 #$ -cwd
-#$ -pe mp 8
+#$ -pe mp 12
 #$ -l mem_free=6G
-#$ -N calib-scenario
+#$ -N calib-lausitz
 
 date
 hostname

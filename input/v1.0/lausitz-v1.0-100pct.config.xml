@@ -8,8 +8,8 @@
 	<module name="controler">
 		<param name="lastIteration" value="700"/>
 		<param name="overwriteFiles" value="failIfDirectoryExists"/>
-		<param name="runId" value="leipzig-25pct"/>
-		<param name="outputDirectory" value="./output/output-lausitz-25pct"/>
+		<param name="runId" value="lausitz-25pct"/>
+		<param name="outputDirectory" value="./output/output-lausitz-100pct"/>
 		<param name="writeEventsInterval" value="100"/>
 		<param name="writePlansInterval" value="100"/>
 		<param name="enableLinkToLinkRouting" value="false"/>
@@ -19,17 +19,17 @@
 	<module name="global">
 		<param name="coordinateSystem" value="EPSG:25832"/>
 		<param name="insistingOnDeprecatedConfigVersion" value="false"/>
-		<param name="numberOfThreads" value="6"/>
+		<param name="numberOfThreads" value="12"/>
 	</module>
 
 	<module name="network">
-		<param name="inputNetworkFile" value="lausitz-network-with-pt.xml.gz"/>
+		<param name="inputNetworkFile" value="lausitz-v1.0-network-with-pt.xml.gz"/>
 		<param name="laneDefinitionsFile" value="null"/>
 	</module>
 
 	<module name="plans">
 		<param name="inputPlansFile"
-		       value="lausitz-100pct.plans.xml.gz"/>
+		       value="lausitz-v1.0-100pct.plans.xml.gz"/>
 		<param name="removingUnnecessaryPlanAttributes" value="true"/>
 	</module>
 
@@ -61,7 +61,7 @@
 		<param name="flowCapacityFactor" value="1"/>
 		<param name="storageCapacityFactor" value="1"/>
 		<param name="mainMode" value="car,freight"/>
-		<param name="numberOfThreads" value="16"/>
+		<param name="numberOfThreads" value="12"/>
 		<param name="startTime" value="00:00:00"/>
 		<param name="stuckTime" value="30.0"/>
 		<param name="trafficDynamics" value="queue"/>

@@ -1,23 +1,21 @@
 #!/bin/bash --login
-#$ -l h_rt=732000
+#$ -l h_rt=790000
 #$ -j y
 #$ -m a
 #$ -o ./logfile/logfile_$JOB_NAME.log
 #$ -cwd
-#$ -pe mp 8
+#$ -pe mp 12
 #$ -l mem_free=6G
-#$ -N run-scenario
+#$ -N lausitz
 
 date
 hostname
 
-# FIXME: Update scenario params
+jar="matsim-lausitz-*.jar"
+memory="${RUN_MEMORY:-70G}"
+config="${RUN_CONFIG:-lausitz-v1.0-100pct.config.xml}"
 
-jar="matsim-template-1.x-SNAPSHOT.jar"
-memory="${RUN_MEMORY:-46G}"
-config="${RUN_CONFIG:-config.xml}"
-
-arguments="<put custom args here>"
+arguments=""
 
 # Don't change anything below
 ################

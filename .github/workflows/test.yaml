@@ -27,8 +27,8 @@ jobs:
         run: mvn --batch-mode --update-snapshots test -Dmatsim.preferLocalDtds=true -Dmaven.javadoc.skip -e
       - uses: actions/upload-artifact@v3
         with:
-          name: jacoco-report
-          path: reports/jacoco/
+          name: test-coverage
+          path: target/site/jacoco/
 
     env:
       MAVEN_OPTS: -Xmx10G

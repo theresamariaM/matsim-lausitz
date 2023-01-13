@@ -18,14 +18,13 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.matsim-scenarios</groupId>
-	<artifactId>matsim-template</artifactId>
+	<artifactId>matsim-lausitz</artifactId>
 	<version>1.x-SNAPSHOT</version>
 
-	<name>MATSim Template Model</name>
-	<description>A transport model of template</description>
+	<name>MATSim Lausitz Model</name>
+	<description>A transport model of the Lausitz region and its surroundings</description>
 
 	<properties>
-		<!-- FIXME: change main class -->
 		<main.class>org.matsim.run.RunLausitzScenario</main.class>
 
 		<!-- Don't modify, will use the same version as parent -->
@@ -40,8 +39,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub Packages</name>
-			<!-- FIXME: Update Repo -->
-			<url>https://maven.pkg.github.com/matsim-scenarios/matsim-template-scenario</url>
+			<url>https://maven.pkg.github.com/matsim-scenarios/matsim-lausitz</url>
 		</repository>
 	</distributionManagement>
 
@@ -60,7 +58,11 @@
 		</dependency>
 
 		<!-- Custom dependencies -->
-
+		<dependency>
+			<groupId>org.hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>2.7.1</version>
+		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>
@@ -100,7 +102,7 @@
 				<configuration>
 					<forkMode>once</forkMode>
 					<!-- avoid out of memory errors: -->
-					<argLine>-Xmx9500m -Djava.awt.headless=true -Dmatsim.preferLocalDtds=true</argLine>
+					<argLine>@{argLine} -Xmx9500m -Djava.awt.headless=true -Dmatsim.preferLocalDtds=true</argLine>
 					<!--necessary in tu berlin gitlab. BUT not good in other places, so solve by command line switch only where needed.  kai, nov'18-->
 					<!--<useSystemClassLoader>false</useSystemClassLoader>-->
 				</configuration>
@@ -118,7 +120,7 @@
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>prepare-package</phase>
+						<phase>test</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>

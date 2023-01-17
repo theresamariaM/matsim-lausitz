@@ -10,8 +10,8 @@ osmosis := osmosis\bin\osmosis
 
 .PHONY: prepare
 
-$(JAR):
-	mvn package
+#$(JAR):
+#	mvn package
 
 # Required files
 input/network.osm.pbf:
@@ -25,7 +25,7 @@ input/2019_B_S.zip:
 	curl https://www.bast.de/videos/2019_B_S.zip -o $@
 
 input/Jawe2019.csv:
-	curl https://www.bast.de/DE/Verkehrstechnik/Fachthemen/v2-verkehrszaehlung/Daten/2019_1/Jawe2019.csv?view=renderTcDataExportCSV&cms_strTyp=A -o $@
+	curl https://www.bast.de/DE/Verkehrstechnik/Fachthemen/v2-verkehrszaehlung/Daten/2019_1/Jawe2019.csv?view=renderTcDataExportCSV&cms_strTyp=A -o $@ \
 
 input/network.osm: input/network.osm.pbf
 
@@ -132,10 +132,17 @@ input/$V/$N-$V-100pct.plans.xml.gz: input/freight-trips.xml.gz input/$V/prepare-
     	 --sample-size 1\
     	 --samples 0.25 0.01\
 
-input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip input/Jawe2019.csv
+input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip input/Jawe2019.csv input/$V/$N-$V-network-with-pt.xml.gz
 
-	java -jar $(JAR) prepare counts-from-bast\
-		# TODO
+	java -Xmx20G -jar $(JAR) prepare counts-from-bast\
+		--network input/$V/$N-$V-network-with-pt.xml.gz\
+		--motorway-data input/2019_A_S.zip\
+		--primary-data input/2019_B_S.zip\
+		--station-data input/Jawe2019.csv\
+		--year 2019\
+		--shp input/network-area/network-area.shp --shp-crs $(CRS)\
+		--car-output $@\
+		--freight-output $@\
 
 check: input/$V/$N-$V-100pct.plans.xml.gz
 	java -jar $(JAR) analysis check-population $<\
@@ -143,5 +150,5 @@ check: input/$V/$N-$V-100pct.plans.xml.gz
 	 --shp ../shared-svn/projects/DiTriMo/data/shp/$N.shp --shp-crs $(CRS)
 
 # Aggregated target
-prepare: input/$V/$N-$V-100pct.plans.xml.gz input/$V/$N-$V-network-with-pt.xml.gz
+prepare: input/$V/$N-$V-100pct.plans.xml.gz input/$V/$N-$V-network-with-pt.xml.gz input/$V/$N-$V-counts-car-bast.xml.gz
 	echo "Done"

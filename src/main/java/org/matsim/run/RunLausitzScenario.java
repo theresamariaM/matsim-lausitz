@@ -12,6 +12,7 @@ import org.matsim.application.analysis.traffic.LinkStats;
 import org.matsim.application.analysis.travelTimeValidation.TravelTimeAnalysis;
 import org.matsim.application.options.SampleOptions;
 import org.matsim.application.prepare.CreateLandUseShp;
+import org.matsim.application.prepare.counts.CreateCountsFromBAStData;
 import org.matsim.application.prepare.freight.tripExtraction.ExtractRelevantFreightTrips;
 import org.matsim.application.prepare.network.CleanNetwork;
 import org.matsim.application.prepare.network.CreateNetworkFromSumo;
@@ -33,7 +34,8 @@ import java.util.Set;
 @MATSimApplication.Prepare({
 		CreateNetworkFromSumo.class, CreateTransitScheduleFromGtfs.class, TrajectoryToPlans.class, GenerateShortDistanceTrips.class,
 		MergePopulations.class, ExtractRelevantFreightTrips.class, DownSamplePopulation.class, ExtractHomeCoordinates.class, CleanNetwork.class,
-		CreateLandUseShp.class, ResolveGridCoordinates.class, FixSubtourModes.class, AdjustActivityToLinkDistances.class, XYToLinks.class
+		CreateLandUseShp.class, ResolveGridCoordinates.class, FixSubtourModes.class, AdjustActivityToLinkDistances.class, XYToLinks.class,
+		CreateCountsFromBAStData.class
 })
 @MATSimApplication.Analysis({
 		TravelTimeAnalysis.class, LinkStats.class, CheckPopulation.class

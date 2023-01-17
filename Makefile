@@ -17,6 +17,15 @@ $(JAR):
 input/network.osm.pbf:
 	curl https://download.geofabrik.de/europe/germany-230101.osm.pbf -o input/network.osm.pbf
 
+# Bast count data
+input/2019_A_S.zip:
+	curl https://www.bast.de/videos/2019_A_S.zip -o $@
+
+input/2019_B_S.zip:
+	curl https://www.bast.de/videos/2019_B_S.zip -o $@
+
+input/Jawe2019.csv:
+	curl https://www.bast.de/DE/Verkehrstechnik/Fachthemen/v2-verkehrszaehlung/Daten/2019_1/Jawe2019.csv?view=renderTcDataExportCSV&cms_strTyp=A -o $@
 
 input/network.osm: input/network.osm.pbf
 
@@ -123,6 +132,10 @@ input/$V/$N-$V-100pct.plans.xml.gz: input/freight-trips.xml.gz input/$V/prepare-
     	 --sample-size 1\
     	 --samples 0.25 0.01\
 
+input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip input/Jawe2019.csv
+
+	java -jar $(JAR) prepare counts-from-bast\
+		# TODO
 
 check: input/$V/$N-$V-100pct.plans.xml.gz
 	java -jar $(JAR) analysis check-population $<\

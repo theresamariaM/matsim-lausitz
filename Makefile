@@ -142,7 +142,7 @@ input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip inp
 		--year 2019\
 		--shp input/network-area/network-area.shp --shp-crs $(CRS)\
 		--car-output $@\
-		--freight-output $@\
+		--freight-output input/$V/$N-$V-counts-freight-bast.xml.gz
 
 check: input/$V/$N-$V-100pct.plans.xml.gz
 	java -jar $(JAR) analysis check-population $<\

@@ -25,7 +25,7 @@ input/2019_B_S.zip:
 	curl https://www.bast.de/videos/2019_B_S.zip -o $@
 
 input/Jawe2019.csv:
-	curl https://www.bast.de/DE/Verkehrstechnik/Fachthemen/v2-verkehrszaehlung/Daten/2019_1/Jawe2019.csv?view=renderTcDataExportCSV&cms_strTyp=A -o $@ \
+	curl "https://www.bast.de/DE/Verkehrstechnik/Fachthemen/v2-verkehrszaehlung/Daten/2019_1/Jawe2019.csv?view=renderTcDataExportCSV&cms_strTyp=A" -o $@
 
 input/network.osm: input/network.osm.pbf
 
@@ -142,7 +142,7 @@ input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip inp
 		--year 2019\
 		--shp input/network-area/network-area.shp --shp-crs $(CRS)\
 		--car-output $@\
-		--freight-output input/$V/$N-$V-counts-freight-bast.xml.gz
+		--freight-output $(subst car,freight,$@)
 
 check: input/$V/$N-$V-100pct.plans.xml.gz
 	java -jar $(JAR) analysis check-population $<\

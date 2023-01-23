@@ -95,8 +95,6 @@ public class DownloadCommuterStatistic implements MATSimAppCommand {
 
 				log.info("Parsed {} relations", parsed.size());
 
-				System.out.println(parsed);
-
 				results.addAll(parsed);
 			}
 		}

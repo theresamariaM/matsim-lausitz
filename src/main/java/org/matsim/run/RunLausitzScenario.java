@@ -25,6 +25,7 @@ import org.matsim.core.config.groups.VspExperimentalConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.run.analysis.CommuterAnalysis;
+import org.matsim.run.analysis.DownloadCommuterStatistic;
 import picocli.CommandLine;
 
 import javax.annotation.Nullable;
@@ -39,7 +40,7 @@ import java.util.Set;
 		CreateCountsFromBAStData.class
 })
 @MATSimApplication.Analysis({
-		TravelTimeAnalysis.class, LinkStats.class, CheckPopulation.class, CommuterAnalysis.class
+		TravelTimeAnalysis.class, LinkStats.class, CheckPopulation.class, CommuterAnalysis.class, DownloadCommuterStatistic.class
 })
 public class RunLausitzScenario extends MATSimApplication {
 

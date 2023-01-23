@@ -107,7 +107,6 @@ public class CommuterAnalysis implements MATSimAppCommand, PersonAlgorithm {
 				.incrementAndGet();
 	}
 
-	private record OD(String origin, String destination) {
-	}
+	private record OD(String origin, String destination) { }
 
 }

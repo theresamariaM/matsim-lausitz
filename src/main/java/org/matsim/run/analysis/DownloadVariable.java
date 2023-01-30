@@ -17,10 +17,10 @@ import picocli.CommandLine;
 import java.nio.file.Path;
 import java.util.concurrent.TimeUnit;
 
-@CommandLine.Command(name = "download-gemeinden", description = "Download all existing Gemeinen from Regionalstatistik")
-public class DownloadGemeinden implements MATSimAppCommand {
+@CommandLine.Command(name = "download-variable", description = "Downloads existing entries for a variable from Regionalstatistik")
+public class DownloadVariable implements MATSimAppCommand {
 
-	private static final Logger log = LogManager.getLogger(DownloadGemeinden.class);
+	private static final Logger log = LogManager.getLogger(DownloadVariable.class);
 
 	@CommandLine.Option(names = "--username", required = true, description = "Username for regionalstatistik.de")
 	private String username;
@@ -31,11 +31,17 @@ public class DownloadGemeinden implements MATSimAppCommand {
 	@CommandLine.Option(names = "--output", description = "Output csv", required = true)
 	private Path output;
 
+	@CommandLine.Option(names = "--variable", description = "Variable to download (e.g. GEMEIN, PGEMEIN)", required = true)
+	private String variable;
+
+	@CommandLine.Option(names = "--page-length", description = "Maximum page length", defaultValue = "15000")
+	private int length;
+
 	@CommandLine.Mixin
 	private CsvOptions csv;
 
 	public static void main(String[] args) {
-		new DownloadGemeinden().execute(args);
+		new DownloadVariable().execute(args);
 	}
 
 	@Override
@@ -56,8 +62,8 @@ public class DownloadGemeinden implements MATSimAppCommand {
 
 		try (CloseableHttpClient client = HttpClients.createDefault()) {
 
-			HttpGet httpGet = new HttpGet(String.format("https://www.regionalstatistik.de/genesisws/rest/2020/catalogue/values2variable?username=%s&password=%s&name=PGEMEIN&area=all&pagelength=7000",
-					username, password));
+			HttpGet httpGet = new HttpGet(String.format("https://www.regionalstatistik.de/genesisws/rest/2020/catalogue/values2variable?username=%s&password=%s&name=%s&area=all&pagelength=%d",
+					username, password, variable, length));
 
 			httpGet.setConfig(config);
 

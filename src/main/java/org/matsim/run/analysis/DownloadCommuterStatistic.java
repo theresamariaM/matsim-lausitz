@@ -149,7 +149,7 @@ public class DownloadCommuterStatistic implements MATSimAppCommand {
 		List<String> lines = table.lines().toList();
 
 		List<OD> result = new ArrayList<>();
-		String from = gemeinde.get("name").intern();
+		String from = gemeinde.get("code").intern();
 
 		boolean parse = false;
 		for (String line : lines) {
@@ -169,7 +169,7 @@ public class DownloadCommuterStatistic implements MATSimAppCommand {
 
 			String[] split = line.split(";");
 			try {
-				result.add(new OD(from, split[1].intern(), Integer.parseInt(split[2])));
+				result.add(new OD(from, split[0].intern(), Integer.parseInt(split[2])));
 			} catch (NumberFormatException e) {
 				// Ignore parse error
 			}

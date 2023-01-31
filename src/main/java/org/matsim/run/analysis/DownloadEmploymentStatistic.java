@@ -21,10 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@CommandLine.Command(name = "download-labor-statistics", description = "Download table 13111-06-02-4 (Sozialversicherungspflichtig Beschäftigte am Wohnort) from regionalstatistik.de")
-public class DownloadLaborStatistic implements MATSimAppCommand {
+@CommandLine.Command(name = "download-employment-statistics", description = "Download table 13312-01-05-4 (Erwerbstätige nach Wirtschaftszweigen) from regionalstatistik.de")
+public class DownloadEmploymentStatistic implements MATSimAppCommand {
 
-	private static final Logger log = LogManager.getLogger(DownloadLaborStatistic.class);
+	private static final Logger log = LogManager.getLogger(DownloadEmploymentStatistic.class);
 
 	@CommandLine.Option(names = "--username", required = true, description = "Username for regionalstatistik.de")
 	private String username;
@@ -41,7 +41,7 @@ public class DownloadLaborStatistic implements MATSimAppCommand {
 	private RequestConfig config;
 
 	public static void main(String[] args) {
-		new DownloadLaborStatistic().execute(args);
+		new DownloadEmploymentStatistic().execute(args);
 	}
 
 	@Override
@@ -64,9 +64,9 @@ public class DownloadLaborStatistic implements MATSimAppCommand {
 		}
 
 		try (CSVPrinter printer = csv.createPrinter(output)) {
-			printer.printRecord("code", "age", "m", "f");
+			printer.printRecord("code", "employed");
 			for (Row row : rows) {
-				printer.printRecord(row.code, row.ageGroup, row.m, row.f);
+				printer.printRecord(row.code, (int) row.total);
 			}
 		}
 
@@ -76,7 +76,7 @@ public class DownloadLaborStatistic implements MATSimAppCommand {
 	private String downloadResult(CloseableHttpClient client) throws IOException {
 
 		HttpGet httpGet = new HttpGet(String.format("https://www.regionalstatistik.de/genesisws/rest/2020/data/table?username=%s&password=%s&name=%s&area=all&compress=true",
-				username, password, "13111-06-02-4"));
+				username, password, "13312-01-05-4"));
 
 		httpGet.setConfig(config);
 
@@ -88,7 +88,7 @@ public class DownloadLaborStatistic implements MATSimAppCommand {
 	private List<Row> parseResult(String table) {
 
 		List<Row> result = new ArrayList<>();
-		List<String> lines = table.lines().skip(10).toList();
+		List<String> lines = table.lines().skip(7).toList();
 
 		for (String line : lines) {
 			// End of data
@@ -97,11 +97,8 @@ public class DownloadLaborStatistic implements MATSimAppCommand {
 
 			String[] split = line.split(";");
 
-			if (split[3].equals("Insgesamt"))
-				continue;
-
 			try {
-				result.add(new Row(split[1], DownloadPopulationStatistic.formatAge(split[3]), Integer.parseInt(split[5]), Integer.parseInt(split[6])));
+				result.add(new Row(split[1], Double.parseDouble(split[3].replace(",", ".")) * 1000));
 			} catch (NumberFormatException e) {
 				log.warn("Format error in {}", split[2]);
 			}
@@ -110,7 +107,7 @@ public class DownloadLaborStatistic implements MATSimAppCommand {
 		return result;
 	}
 
-	private record Row(String code, String ageGroup, int m, int f) {
+	private record Row(String code, double total) {
 	}
 
 

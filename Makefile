@@ -5,8 +5,11 @@ CRS := EPSG:25832
 
 JAR := matsim-$(N)-*.jar
 
-export SUMO_HOME := $(abspath ../../sumo-1.15.0/)
-osmosis := osmosis\bin\osmosis
+ifndef SUMO_HOME
+	export SUMO_HOME := $(abspath ../../sumo-1.15.0/)
+endif
+
+osmosis := osmosis/bin/osmosis
 
 .PHONY: prepare
 
@@ -87,7 +90,7 @@ input/$V/$N-$V-network-with-pt.xml.gz: input/$V/$N-$V-network.xml.gz
 	 --shp ../shared-svn/projects/DiTriMo/data/germany-area/germany-area.shp\
 
 input/freight-trips.xml.gz: input/$V/$N-$V-network.xml.gz
-	java -jar $(JAR) prepare extract-freight-trips ../shared-svn/projects/german-wide-freight/v1.2/german-wide-freight-25pct.xml.gz\
+	java -jar $(JAR) prepare extract-freight-trips ../shared-svn/projects/german-wide-freight/v1.2.1/german-wide-freight-25pct.xml.gz\
 	 --network ../shared-svn/projects/german-wide-freight/original-data/german-primary-road.network.xml.gz\
 	 --input-crs EPSG:5677\
 	 --target-crs $(CRS)\
@@ -104,7 +107,7 @@ input/$V/prepare-100pct.plans.xml.gz:
 	 input/$V/prepare-100pct.plans.xml.gz\
 	 --input-crs $(CRS)\
 	 --grid-resolution 300\
-	 --landuse ../matsim-leipzig/scenarios/input/landuse/landuse.shp\
+	 --landuse ../shared-svn/projects/matsim-germany/landuse/landuse.shp\
 	 --output $@
 
 input/$V/$N-$V-100pct.plans.xml.gz: input/freight-trips.xml.gz input/$V/prepare-100pct.plans.xml.gz
@@ -148,9 +151,9 @@ check: input/$V/$N-$V-100pct.plans.xml.gz
 	java -jar $(JAR) analysis commuter\
 	 --population $<\
  	 --input-crs $(CRS)\
-	 --shp ../shared-svn/projects/DiTriMo/data/vg5000/vg5000_ebenen_0101/VG5000_VWG.shp\
-	 --attr GEN\
-	 --output input/$N-$V-commuter.csv
+	 --shp ../shared-svn/projects/matsim-germany/vg5000/vg5000_ebenen_0101/VG5000_GEM.shp\
+	 --attr ARS\
+	 --output input/$V/$N-$V-commuter.csv
 
 	java -jar $(JAR) analysis check-population $<\
  	 --input-crs $(CRS)\

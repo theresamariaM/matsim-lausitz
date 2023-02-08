@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>com.github.matsim-org</groupId>
 			<artifactId>gtfs2matsim</artifactId>
-			<version>master-4ca8b37091-1</version>
+			<version>master-33809c4f0f-1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>org.matsim</groupId>

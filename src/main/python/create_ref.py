@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import geopandas as gpd
-
+import pandas as pd
 from matsim.scenariogen.data import run_create_ref_data
+from matsim.scenariogen.data.preparation import calc_needed_short_distance_trips
 
 
 def person_filter(df):
@@ -29,3 +30,20 @@ if __name__ == "__main__":
     print("Filtered %s trips" % len(trips))
 
     print(share)
+
+    # Simulated trips
+    sim_persons = pd.read_csv("../../../output/output-lausitz-100pct/lausitz-100pct.output_persons.csv.gz",
+                              delimiter=";", dtype={"person": "str"})
+    sim_persons = sim_persons[sim_persons.subpopulation == "person"]
+    sim_persons = gpd.GeoDataFrame(sim_persons,
+                                   geometry=gpd.points_from_xy(sim_persons.home_x, sim_persons.home_y)).set_crs("EPSG:25832")
+
+    sim_persons = gpd.sjoin(sim_persons, region, how="inner", predicate="intersects")
+
+    sim = pd.read_csv("../../../output/output-lausitz-100pct/lausitz-100pct.output_trips.csv.gz",
+                      delimiter=";", dtype={"person": "str"})
+
+    sim = pd.merge(sim, sim_persons, how="inner", left_on="person", right_on="person")
+
+    share, add_trips = calc_needed_short_distance_trips(trips, sim, max_dist=1500)
+    print("Short distance trip missing: ", add_trips)

@@ -90,7 +90,7 @@ input/plans-longHaulFreight.xml.gz: input/$V/$N-$V-network.xml.gz
 	 --network ../public-svn/matsim/scenarios/countries/de/german-wide-freight/v2/germany-europe-network.xml.gz\
 	 --input-crs $(CRS)\
 	 --target-crs $(CRS)\
-	 --shp $(shared)/data/shp/$N.shp --shp-crs $(CRS)\
+	 --shp input/shp/lausitz.shp --shp-crs $(CRS)\
 	 --cut-on-boundary\
 	 --output $@
 
@@ -104,19 +104,20 @@ input/$V/prepare-100pct.plans.xml.gz:
 	 input/$V/prepare-100pct.plans.xml.gz\
 	 --input-crs $(CRS)\
 	 --grid-resolution 300\
-	 --landuse ../shared-svn/projects/matsim-germany/landuse/landuse.shp\
+	 --landuse $(germany)/landuse/landuse.shp\
 	 --output $@
 
-input/$V/$N-$V-100pct.plans.xml.gz: input/plans-longHaulFreight.xml.gz input/$V/prepare-100pct.plans.xml.gz
+input/$V/$N-$V-100pct.plans-initial.xml.gz: input/plans-longHaulFreight.xml.gz input/$V/prepare-100pct.plans.xml.gz
 
 	$(sc) prepare generate-short-distance-trips\
  	 --population input/$V/prepare-100pct.plans.xml.gz\
  	 --input-crs $(CRS)\
-	 --shp $(shared)/data/shp/$N.shp --shp-crs $(CRS)\
- 	 --num-trips 1 # TODO
+	 --shp input/shp/lausitz.shp --shp-crs $(CRS)\
+	 --range 1500\
+ 	 --num-trips 795513
 
 	$(sc) prepare adjust-activity-to-link-distances input/$V/prepare-100pct.plans-with-trips.xml.gz\
-	 --shp $(shared)/data/shp/$N.shp --shp-crs $(CRS)\
+	 --shp input/shp/lausitz.shp --shp-crs $(CRS)\
      --scale 1.15\
      --input-crs $(CRS)\
      --network input/$V/$N-$V-network.xml.gz\
@@ -126,13 +127,11 @@ input/$V/$N-$V-100pct.plans.xml.gz: input/plans-longHaulFreight.xml.gz input/$V/
 
 	$(sc) prepare merge-populations $@ $< --output $@
 
-	# TODO: set home coordinates attributes
-
 	$(sc) prepare extract-home-coordinates $@ --output $@ --csv input/$V/$N-$V-homes.csv
 
 	$(sc) prepare downsample-population $@\
     	 --sample-size 1\
-    	 --samples 0.25 0.01\
+    	 --samples 0.25 0.1 0.01\
 
 input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip input/Jawe2019.csv input/$V/$N-$V-network-with-pt.xml.gz
 
@@ -142,22 +141,22 @@ input/$V/$N-$V-counts-car-bast.xml.gz: input/2019_A_S.zip input/2019_B_S.zip inp
 		--primary-data input/2019_B_S.zip\
 		--station-data input/Jawe2019.csv\
 		--year 2019\
-		 --shp $(shared)/data/shp/$N.shp --shp-crs $(CRS)\
+		--shp input/shp/lausitz.shp --shp-crs $(CRS)\
 		--car-output $@\
 		--freight-output $(subst car,freight,$@)
 
-check: input/$V/$N-$V-100pct.plans.xml.gz
+check: input/$V/$N-$V-100pct.plans-initial.xml.gz
 	$(sc) analysis commuter\
 	 --population $<\
  	 --input-crs $(CRS)\
-	 --shp ../shared-svn/projects/matsim-germany/vg5000/vg5000_ebenen_0101/VG5000_GEM.shp\
+	 --shp $(germany)/vg5000/vg5000_ebenen_0101/VG5000_GEM.shp\
 	 --attr ARS\
 	 --output input/$V/$N-$V-commuter.csv
 
 	$(sc) analysis check-population $<\
  	 --input-crs $(CRS)\
-	 --shp $(shared)/data/shp/$N.shp --shp-crs $(CRS)
+	 --shp input/shp/lausitz.shp --shp-crs $(CRS)
 
 # Aggregated target
-prepare: input/$V/$N-$V-100pct.plans.xml.gz input/$V/$N-$V-network-with-pt.xml.gz input/$V/$N-$V-counts-car-bast.xml.gz
+prepare: input/$V/$N-$V-100pct.plans-initial.xml.gz input/$V/$N-$V-network-with-pt.xml.gz input/$V/$N-$V-counts-car-bast.xml.gz
 	echo "Done"

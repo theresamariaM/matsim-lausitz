@@ -18,11 +18,12 @@ import org.matsim.application.prepare.population.*;
 import org.matsim.application.prepare.pt.CreateTransitScheduleFromGtfs;
 import org.matsim.contrib.vsp.scenario.SnzActivities;
 import org.matsim.core.config.Config;
+import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.RoutingConfigGroup;
-import org.matsim.core.config.groups.VspExperimentalConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
 import org.matsim.run.analysis.CommuterAnalysis;
+import org.matsim.simwrapper.SimWrapperConfigGroup;
 import org.matsim.simwrapper.SimWrapperModule;
 import picocli.CommandLine;
 
@@ -41,10 +42,10 @@ import java.util.Set;
 })
 public class RunLausitzScenario extends MATSimApplication {
 
-	static final String VERSION = "1.0";
+	public static final String VERSION = "1.0";
 
 	@CommandLine.Mixin
-	private final SampleOptions sample = new SampleOptions(100, 25, 1);
+	private final SampleOptions sample = new SampleOptions(100, 25, 10, 1);
 
 
 	public RunLausitzScenario(@Nullable Config config) {
@@ -66,14 +67,22 @@ public class RunLausitzScenario extends MATSimApplication {
 		// Add all activity types with time bins
 		SnzActivities.addScoringParams(config);
 
-		config.controller().setOutputDirectory(sample.adjustName(config.controller().getOutputDirectory()));
-		config.plans().setInputFile(sample.adjustName(config.plans().getInputFile()));
-		config.controller().setRunId(sample.adjustName(config.controller().getRunId()));
+		SimWrapperConfigGroup simWrapper = ConfigUtils.addOrGetModule(config, SimWrapperConfigGroup.class);
 
-		config.qsim().setFlowCapFactor(sample.getSize() / 100.0);
-		config.qsim().setStorageCapFactor(sample.getSize() / 100.0);
+		// Path is relative to config
+		simWrapper.defaultParams().shp = "../shp/lausitz.shp";
+		simWrapper.defaultParams().mapCenter = "14.3463,51.5626";
+		simWrapper.defaultParams().mapZoomLevel = 9.0;
 
-		config.vspExperimental().setVspDefaultsCheckingLevel(VspExperimentalConfigGroup.VspDefaultsCheckingLevel.info);
+		if (sample.isSet()) {
+			config.controller().setOutputDirectory(sample.adjustName(config.controller().getOutputDirectory()));
+			config.plans().setInputFile(sample.adjustName(config.plans().getInputFile()));
+			config.controller().setRunId(sample.adjustName(config.controller().getRunId()));
+
+			config.qsim().setFlowCapFactor(sample.getSize() / 100.0);
+			config.qsim().setStorageCapFactor(sample.getSize() / 100.0);
+		}
+
 		config.routing().setAccessEgressType(RoutingConfigGroup.AccessEgressType.accessEgressModeToLink);
 
 		// TODO: Config options

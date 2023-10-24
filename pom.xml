@@ -12,7 +12,7 @@
 		<!--<matsim.version>14.0-PR1452</matsim.version>-->
 
 		<!-- snapshot == not recommended: rather use PR-labelled release!-->
-		<version>16.0-PR2888</version>
+		<version>16.0-PR2895</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>

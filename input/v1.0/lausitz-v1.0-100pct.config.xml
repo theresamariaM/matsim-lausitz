@@ -5,7 +5,7 @@
 		<param name="mutationRange" value="7200.0"/>
 	</module>
 
-	<module name="controler">
+	<module name="controller">
 		<param name="lastIteration" value="600"/>
 		<param name="overwriteFiles" value="failIfDirectoryExists"/>
 		<param name="runId" value="lausitz-100pct"/>
@@ -23,13 +23,14 @@
 	</module>
 
 	<module name="network">
-		<param name="inputNetworkFile" value="./lausitz-v1.0-network-with-pt.xml.gz"/>
+		<param name="inputNetworkFile"
+			   value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-network-with-pt.xml.gz"/>
 		<param name="laneDefinitionsFile" value="null"/>
 	</module>
 
 	<module name="plans">
 		<param name="inputPlansFile"
-		       value="./lausitz-v1.0-100pct.plans-initial.xml.gz"/>
+			   value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0//lausitz-v1.0-100pct.plans-initial.xml.gz"/>
 		<param name="removingUnnecessaryPlanAttributes" value="true"/>
 	</module>
 
@@ -38,13 +39,13 @@
 	</module>
 
 	<module name="transit">
-		<param name="transitScheduleFile"  value="./lausitz-v1.0-transitSchedule.xml.gz"/>
-		<param name="vehiclesFile"  value="./lausitz-v1.0-transitVehicles.xml.gz"/>
+		<param name="transitScheduleFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0//lausitz-v1.0-transitSchedule.xml.gz"/>
+		<param name="vehiclesFile"  value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0//lausitz-v1.0-transitVehicles.xml.gz"/>
 		<param name="useTransit" value="true"/>
 	</module>
 
 	<module name="counts">
-		<param name="inputCountsFile" value="./lausitz-v1.0-counts-car-bast.xml.gz"/>
+		<param name="inputCountsFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0//lausitz-v1.0-counts-car-bast.xml.gz"/>
 	</module>
 
 	<module name="planscalcroute">

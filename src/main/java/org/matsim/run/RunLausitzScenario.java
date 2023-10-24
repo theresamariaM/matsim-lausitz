@@ -35,7 +35,7 @@ import java.util.Set;
 		CreateNetworkFromSumo.class, CreateTransitScheduleFromGtfs.class, TrajectoryToPlans.class, GenerateShortDistanceTrips.class,
 		MergePopulations.class, ExtractRelevantFreightTrips.class, DownSamplePopulation.class, ExtractHomeCoordinates.class, CleanNetwork.class,
 		CreateLandUseShp.class, ResolveGridCoordinates.class, FixSubtourModes.class, AdjustActivityToLinkDistances.class, XYToLinks.class,
-		CreateCountsFromBAStData.class
+		SplitActivityTypesDuration.class, CreateCountsFromBAStData.class
 })
 @MATSimApplication.Analysis({
 		LinkStats.class, CheckPopulation.class, CommuterAnalysis.class,
@@ -73,14 +73,18 @@ public class RunLausitzScenario extends MATSimApplication {
 		simWrapper.defaultParams().shp = "../shp/lausitz.shp";
 		simWrapper.defaultParams().mapCenter = "14.3463,51.5626";
 		simWrapper.defaultParams().mapZoomLevel = 9.0;
+		simWrapper.defaultParams().sampleSize = 1d;
 
 		if (sample.isSet()) {
 			config.controller().setOutputDirectory(sample.adjustName(config.controller().getOutputDirectory()));
 			config.plans().setInputFile(sample.adjustName(config.plans().getInputFile()));
 			config.controller().setRunId(sample.adjustName(config.controller().getRunId()));
 
-			config.qsim().setFlowCapFactor(sample.getSize() / 100.0);
-			config.qsim().setStorageCapFactor(sample.getSize() / 100.0);
+			config.qsim().setFlowCapFactor(sample.getSample());
+			config.qsim().setStorageCapFactor(sample.getSample());
+			config.counts().setCountsScaleFactor(100d / sample.getSample());
+
+			simWrapper.defaultParams().sampleSize = sample.getSample();
 		}
 
 		config.routing().setAccessEgressType(RoutingConfigGroup.AccessEgressType.accessEgressModeToLink);

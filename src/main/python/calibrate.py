@@ -3,15 +3,15 @@
 
 import os
 
-import pandas as pd
 import geopandas as gpd
+import pandas as pd
 
 try:
     from matsim import calibration
 except:
     import calibration
 
-#%%
+# %%
 
 if os.path.exists("mid.csv"):
     srv = pd.read_csv("mid.csv")
@@ -26,7 +26,7 @@ if os.path.exists("mid.csv"):
 
     adj.to_csv("mid_adj.csv", index=False)
 
-#%%
+# %%
 
 modes = ["walk", "car", "ride", "pt", "bike"]
 fixed_mode = "walk"
@@ -37,28 +37,26 @@ initial = {
     "ride": -2.22873502992
 }
 
-# FIXME: Adjust
+# Based on MiD 2017, filtered on Lausitz region
 target = {
-    "walk": 0.1,
-    "bike": 0.1,
-    "pt":  0.1,
-    "car": 0.1,
-    "ride": 0.1
+    "walk": 0.199819,
+    "bike": 0.116362,
+    "pt": 0.049501,
+    "car": 0.496881,
+    "ride": 0.137437
 }
 
-region = gpd.read_file("../scenarios/dilutionArea.shp").set_crs("EPSG:25832")
-homes = pd.read_csv("template-v1.0-homes.csv", dtype={"person": "str"})
+region = gpd.read_file("../input/lausitz.shp").to_crs("EPSG:25832")
 
 
 def filter_persons(persons):
-    persons = pd.merge(persons, homes, how="inner", left_on="person", right_on="person")
     persons = gpd.GeoDataFrame(persons, geometry=gpd.points_from_xy(persons.home_x, persons.home_y))
-
-    df = gpd.sjoin(persons.set_crs("EPSG:25832"), city, how="inner", op="intersects")
+    df = gpd.sjoin(persons.set_crs("EPSG:25832"), region, how="inner", op="intersects")
 
     print("Filtered %s persons" % len(df))
 
     return df
+
 
 def filter_modes(df):
     df = df[df.main_mode != "freight"]
@@ -70,15 +68,15 @@ def filter_modes(df):
 # FIXME: Adjust paths and config
 
 study, obj = calibration.create_mode_share_study("calib", "matsim-template-1.0.jar",
-                                        "../scenarios/metropole-ruhr-v1.0/input/metropole-ruhr-v1.4-3pct.config.xml",
-                                        modes, target, 
-                                        initial_asc=initial,
-                                        args="--10pct",
-                                        jvm_args="-Xmx75G -Xmx75G -XX:+AlwaysPreTouch",
-                                        lr=calibration.linear_lr_scheduler(start=0.5),
-                                        person_filter=filter_persons, map_trips=filter_modes, chain_runs=True)
+                                                 "../scenarios/metropole-ruhr-v1.0/input/metropole-ruhr-v1.4-3pct.config.xml",
+                                                 modes, target,
+                                                 initial_asc=initial,
+                                                 args="--10pct",
+                                                 jvm_args="-Xmx75G -Xmx75G -XX:+AlwaysPreTouch",
+                                                 transform_persons=filter_persons, transform_trips=filter_modes,
+                                                 lr=calibration.linear_lr_scheduler(start=0.3, interval=8),
+                                                 chain_runs=calibration.default_chain_scheduler)
 
-
-#%%
+# %%
 
 study.optimize(obj, 10)

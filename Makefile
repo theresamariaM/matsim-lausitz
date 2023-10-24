@@ -70,7 +70,6 @@ input/sumo.net.xml: input/network.osm
 
 input/$V/$N-$V-network.xml.gz: input/sumo.net.xml
 	$(sc) prepare network-from-sumo $< --output $@ --free-speed-factor 0.75
-	$(sc) prepare fix-network $@ --output $@
 	$(sc) prepare clean-network $@ --output $@ --modes car --modes bike
 
 
@@ -129,7 +128,7 @@ input/$V/$N-$V-100pct.plans.xml.gz: input/plans-longHaulFreight.xml.gz input/$V/
 
 	# TODO: set home coordinates attributes
 
-	$(sc) prepare extract-home-coordinates $@ --csv input/$V/$N-$V-homes.csv
+	$(sc) prepare extract-home-coordinates $@ --output $@ --csv input/$V/$N-$V-homes.csv
 
 	$(sc) prepare downsample-population $@\
     	 --sample-size 1\

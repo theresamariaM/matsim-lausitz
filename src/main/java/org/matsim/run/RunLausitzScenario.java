@@ -71,8 +71,8 @@ public class RunLausitzScenario extends MATSimApplication {
 
 		// Path is relative to config
 		simWrapper.defaultParams().shp = "../shp/lausitz.shp";
-		simWrapper.defaultParams().mapCenter = "14.3463,51.5626";
-		simWrapper.defaultParams().mapZoomLevel = 9.0;
+		simWrapper.defaultParams().mapCenter = "14.5,51.53";
+		simWrapper.defaultParams().mapZoomLevel = 6.8;
 		simWrapper.defaultParams().sampleSize = 1d;
 
 		if (sample.isSet()) {
@@ -87,6 +87,8 @@ public class RunLausitzScenario extends MATSimApplication {
 			simWrapper.defaultParams().sampleSize = sample.getSample();
 		}
 
+		config.qsim().setUsingTravelTimeCheckInTeleportation(true);
+		config.qsim().setUsePersonIdForMissingVehicleId(false);
 		config.routing().setAccessEgressType(RoutingConfigGroup.AccessEgressType.accessEgressModeToLink);
 
 		// TODO: Config options

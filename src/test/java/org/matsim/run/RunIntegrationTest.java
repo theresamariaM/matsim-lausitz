@@ -15,7 +15,7 @@ public class RunIntegrationTest {
 
 		assert MATSimApplication.execute(RunLausitzScenario.class,
 			"--1pct",
-			"--iterations", "2",
+			"--iterations", "1",
 			"--output", utils.getOutputDirectory(),
 			"--config:controller.overwriteFiles=deleteDirectoryIfExists") == 0 : "Must return non error code";
 

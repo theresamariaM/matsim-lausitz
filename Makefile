@@ -35,8 +35,9 @@ input/network.osm: $(NETWORK)
 	 --bounding-polygon file="$(shared)/data/cottbus.poly"\
 	 --used-node --wb input/network-detailed.osm.pbf
 
+	# This includes residential as well, since multiple cities are covered by the study area
 	$(osmosis) --rb file=$<\
-	 --tf accept-ways highway=motorway,motorway_link,trunk,trunk_link,primary,primary_link,secondary_link,secondary,tertiary,motorway_junction\
+	 --tf accept-ways highway=motorway,motorway_link,trunk,trunk_link,primary,primary_link,secondary_link,secondary,tertiary,motorway_junction,residential\
 	 --bounding-polygon file="$(shared)/data/lausitz.poly"\
 	 --used-node --wb input/network-coarse.osm.pbf
 
@@ -114,8 +115,8 @@ input/$V/$N-$V-100pct.plans-initial.xml.gz: input/plans-longHaulFreight.xml.gz i
  	 --population input/$V/prepare-100pct.plans.xml.gz\
  	 --input-crs $(CRS)\
 	 --shp input/shp/lausitz.shp --shp-crs $(CRS)\
-	 --range 1500\
- 	 --num-trips 795513
+	 --range 700\
+ 	 --num-trips 324430
 
 	$(sc) prepare adjust-activity-to-link-distances input/$V/prepare-100pct.plans-with-trips.xml.gz\
 	 --shp input/shp/lausitz.shp --shp-crs $(CRS)\

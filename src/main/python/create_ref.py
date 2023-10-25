@@ -47,5 +47,5 @@ if __name__ == "__main__":
 
     sim = pd.merge(sim, sim_persons, how="inner", left_on="person", right_on="person", validate="many_to_one")
 
-    share, add_trips = calc_needed_short_distance_trips(trips, sim, max_dist=1500)
+    share, add_trips = calc_needed_short_distance_trips(trips, sim, max_dist=700)
     print("Short distance trip missing: ", add_trips)

@@ -69,12 +69,6 @@ public class RunLausitzScenario extends MATSimApplication {
 
 		SimWrapperConfigGroup simWrapper = ConfigUtils.addOrGetModule(config, SimWrapperConfigGroup.class);
 
-		// Path is relative to config
-		simWrapper.defaultParams().shp = "../shp/lausitz.shp";
-		simWrapper.defaultParams().mapCenter = "14.5,51.53";
-		simWrapper.defaultParams().mapZoomLevel = 6.8;
-		simWrapper.defaultParams().sampleSize = 1d;
-
 		if (sample.isSet()) {
 			config.controller().setOutputDirectory(sample.adjustName(config.controller().getOutputDirectory()));
 			config.plans().setInputFile(sample.adjustName(config.plans().getInputFile()));

@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-
 import geopandas as gpd
+import os
 import pandas as pd
 
 try:
@@ -32,8 +31,8 @@ modes = ["walk", "car", "ride", "pt", "bike"]
 fixed_mode = "walk"
 initial = {
     "bike": -0.141210,
-    "pt": 0.0781477780346438,
-    "car": 0.871977390743304,
+    "pt": 0,
+    "car": 0,
     "ride": -2.22873502992
 }
 
@@ -59,20 +58,18 @@ def filter_persons(persons):
 
 
 def filter_modes(df):
-    df = df[df.main_mode != "freight"]
+    # Set multi-modal trips to pt
     df.loc[df.main_mode.str.startswith("pt_"), "main_mode"] = "pt"
 
-    return df
+    return df[df.main_mode.isin(modes)]
 
 
-# FIXME: Adjust paths and config
-
-study, obj = calibration.create_mode_share_study("calib", "matsim-template-1.0.jar",
-                                                 "../scenarios/metropole-ruhr-v1.0/input/metropole-ruhr-v1.4-3pct.config.xml",
+study, obj = calibration.create_mode_share_study("calib", "matsim-lausitz-1.x-SNAPSHOT-e8458e3.jar",
+                                                 "../input/v1.0/lausitz-v1.0-100pct.config.xml",
                                                  modes, target,
                                                  initial_asc=initial,
-                                                 args="--10pct",
-                                                 jvm_args="-Xmx75G -Xmx75G -XX:+AlwaysPreTouch",
+                                                 args="--25pct",
+                                                 jvm_args="-Xmx60G -Xmx60G -XX:+AlwaysPreTouch -XX:+UseParallelGC",
                                                  transform_persons=filter_persons, transform_trips=filter_modes,
                                                  lr=calibration.linear_lr_scheduler(start=0.3, interval=8),
                                                  chain_runs=calibration.default_chain_scheduler)

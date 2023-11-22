@@ -45,7 +45,7 @@ target = {
     "ride": 0.137437
 }
 
-region = gpd.read_file("../input/lausitz.shp").to_crs("EPSG:25832")
+region = gpd.read_file("../input/shp/lausitz.shp").to_crs("EPSG:25832")
 
 
 def filter_persons(persons):

@@ -127,14 +127,14 @@ input/$V/$N-$V-100pct.plans-initial.xml.gz: input/plans-longHaulFreight.xml.gz i
 
 	$(sc) prepare fix-subtour-modes --coord-dist 100 --input input/$V/prepare-100pct.plans-adj.xml.gz --output $@
 
+	$(sc) prepare population $@ --output $@
+
 	$(sc) prepare split-activity-types-duration\
 		--input $@\
 		--exclude commercial_start,commercial_end,freight_start,freight_end\
 		--output $@
 
 	$(sc) prepare merge-populations $@ $< --output $@
-
-	$(sc) prepare extract-home-coordinates $@ --output $@ --csv input/$V/$N-$V-homes.csv
 
 	$(sc) prepare downsample-population $@\
     	 --sample-size 1\

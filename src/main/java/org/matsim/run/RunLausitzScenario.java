@@ -22,10 +22,13 @@ import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.config.groups.RoutingConfigGroup;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
+import org.matsim.core.scoring.functions.ScoringParametersForPerson;
 import org.matsim.run.analysis.CommuterAnalysis;
+import org.matsim.run.prepare.PreparePopulation;
 import org.matsim.simwrapper.SimWrapperConfigGroup;
 import org.matsim.simwrapper.SimWrapperModule;
 import picocli.CommandLine;
+import playground.vsp.scoring.IncomeDependentUtilityOfMoneyPersonScoringParameters;
 
 import javax.annotation.Nullable;
 import java.util.Set;
@@ -35,7 +38,7 @@ import java.util.Set;
 		CreateNetworkFromSumo.class, CreateTransitScheduleFromGtfs.class, TrajectoryToPlans.class, GenerateShortDistanceTrips.class,
 		MergePopulations.class, ExtractRelevantFreightTrips.class, DownSamplePopulation.class, ExtractHomeCoordinates.class, CleanNetwork.class,
 		CreateLandUseShp.class, ResolveGridCoordinates.class, FixSubtourModes.class, AdjustActivityToLinkDistances.class, XYToLinks.class,
-		SplitActivityTypesDuration.class, CreateCountsFromBAStData.class
+		SplitActivityTypesDuration.class, CreateCountsFromBAStData.class, PreparePopulation.class
 })
 @MATSimApplication.Analysis({
 		LinkStats.class, CheckPopulation.class, CommuterAnalysis.class,
@@ -114,9 +117,14 @@ public class RunLausitzScenario extends MATSimApplication {
 		controler.addOverridingModule(new AbstractModule() {
 			@Override
 			public void install() {
+
+				bind(ScoringParametersForPerson.class).to(IncomeDependentUtilityOfMoneyPersonScoringParameters.class).asEagerSingleton();
+
 				addControlerListenerBinding().to(ModeChoiceCoverageControlerListener.class);
+
 				addTravelTimeBinding(TransportMode.ride).to(networkTravelTime());
 				addTravelDisutilityFactoryBinding(TransportMode.ride).to(carTravelDisutilityFactoryKey());
+
 			}
 
 		});

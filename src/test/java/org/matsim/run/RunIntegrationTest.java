@@ -1,19 +1,19 @@
 package org.matsim.run;
 
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.matsim.application.MATSimApplication;
 import org.matsim.testcases.MatsimTestUtils;
 
 public class RunIntegrationTest {
 
-	@Rule
+	@RegisterExtension
 	public MatsimTestUtils utils = new MatsimTestUtils();
 
 	@Test
 	public void runScenario() {
 
-		assert MATSimApplication.execute(RunLausitzScenario.class,
+		assert MATSimApplication.execute(LausitzScenario.class,
 			"--1pct",
 			"--iterations", "1",
 			"--output", utils.getOutputDirectory(),

@@ -48,7 +48,7 @@ public class LausitzScenario extends MATSimApplication {
 	public static final String VERSION = "1.0";
 
 	@CommandLine.Mixin
-	private final SampleOptions sample = new SampleOptions(100, 25, 10, 1);
+	private final SampleOptions sample = new SampleOptions( 25, 10, 1);
 
 
 	public LausitzScenario(@Nullable Config config) {
@@ -56,7 +56,7 @@ public class LausitzScenario extends MATSimApplication {
 	}
 
 	public LausitzScenario() {
-		super(String.format("input/v%s/lausitz-v%s-100pct.config.xml", VERSION, VERSION));
+		super(String.format("input/v%s/lausitz-v%s-25pct.config.xml", VERSION, VERSION));
 	}
 
 	public static void main(String[] args) {

@@ -63,7 +63,7 @@ def filter_modes(df):
 
 study, obj = create_calibration(
     "calib",
-    ASCCalibrator(modes, initial, target, lr=utils.linear_lr_scheduler(start=0.3, interval=12)),
+    ASCCalibrator(modes, initial, target, lr=utils.linear_scheduler(start=0.3, interval=12)),
     "matsim-lausitz-1.x-SNAPSHOT-20c8ab3.jar",
     "../input/v1.0/lausitz-v1.0-25pct.config.xml",
     args="--25pct",

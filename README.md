@@ -8,32 +8,13 @@
 ![MATSim network and agents](scenarios/visualization.png "MATSim network and agents")
 
 
-----
-
-When using this template make sure to adapt it as needed:
-
-- [ ] Rename Run-Class in `src/main/java` folder
-- [ ] Modify config in `input`
-- [ ] Update pom.xml
-  - [ ] Name, description and version
-  - [ ] Main class
-- [ ] Makefile
-- [ ] Update CITATION.cff (Authors and version)
-- [ ] Modify calibration.py in `src/main/python`
-- [ ] Update README.md (This file)
-  - [ ] Change Name and URLs
-  - [ ] Badges
-  - [ ] Remove this TODO list when done
-
-----
-
 ### About this project
 
-This repository provides an open MATSim transport model for Leipzig, provided by the [Transport Systems Planning and Transport Telematics group](https://www.vsp.tu-berlin.de) of [Technische Universität Berlin](http://www.tu-berlin.de).
+This repository provides an open MATSim transport model for Lausitz, provided by the [Transport Systems Planning and Transport Telematics group](https://www.vsp.tu-berlin.de) of [Technische Universität Berlin](http://www.tu-berlin.de).
 
 <a rel="TU Berlin" href="https://www.vsp.tu-berlin.de"><img src="https://svn.vsp.tu-berlin.de/repos/public-svn/ueber_uns/logo/TU_BERLIN_Logo_Lang_RGB_SR_rot.svg" width="25%"/></a>
 
-This scenario contains a 25pct sample of Leipzig and its surrounding area; road capacities are accordingly reduced. The scenario is calibrated taking into consideration the traffic counts, modal split and mode-specific trip distance distributions.
+This scenario contains a 25pct sample of the Lausitz and its surrounding area; road capacities are accordingly reduced. The scenario is calibrated taking into consideration the traffic counts, modal split and mode-specific trip distance distributions.
 
 ### Licenses
 
@@ -49,30 +30,93 @@ The **MATSim input files, output files, analysis data and visualizations** are l
 Handling of large files within git is not without problems (git lfs files are not included in the zip download; we have to pay; ...).  In consequence, large files, both on the input and on the output side, reside at https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz .
 
 ----
-### Run the MATSim Template scenario
+## Simple things (without installing/running MATSim)
 
-The Lausitz scenario has a command line interface providing the following options:
+### Use SimWrapper dashboards
 
-![Scenario CLI](scenarios/cli.png "Scenario CLI")
+1. Open SimWrapper at https://simwrapper.github.io/site/ .
+1. Select Explore Data Sources -> VSP Public-SVN .
+1. Navigate to de -> lausitz -> lausitz-v1.0 (https://simwrapper.github.io/site/public/de/lausitz/lausitz-v1.0).
+1. Enjoy the dashboards and visualizations.
 
-It can be used by using either of these methods:
+### Run VIA on output files
 
-##### ... using an IDE, e.g. Eclipse, IntelliJ - Alternative 1: use cloned/downloaded matsim-lausitz repository
+1. Get VIA from https://www.simunto.com/via/.  (There is a free license for a small number of agents; that will probably work but only display a small number of vehicles/agents.)
+1. Go to https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/ .
+1. Decide for a scenario that you find interesting (e.g. `lausitz-v1.0`) and go into that directory.
+1. Inside there, look for an `output-*` directory that you find interesting and go into that directory.
+1. Download `*.output_network.xml.gz` and `*.output_events.xml.gz`.  Best make sure that they do not uncompress, e.g. by "Download linked file as ...".
+1. Get these files into VIA.  This can be achieved in various ways; one is to open VIA and then drag the files from a file browser into VIA.
+1. Run VIA and enjoy.
+
+----
+
+## Downloading the repository - Alternative 1: Download ZIP
+
+1. Click on `Clone or download` and then on `Download ZIP`.
+1. Unzip the repository.
+1. Go to "Run the MATSim Lausitz scenario" below.
+
+## Downloading the repository - Alternative 2: Clone the repository
+
+### Initial stuff (needs to be done once)
+
+1. Install git for the command line.
+1. Type `git clone https://github.com/matsim-scenarios/matsim-lausitz.git` in the command line.
+
+(Or use your IDE, e.g. Eclipse, IntelliJ, to clone the repository.)
+
+This will result in a new `matsim-lausitz` directory.  Memorize where you have put it.  You can move it, as a whole, to some other place.
+
+### Update your local clone of the repository.
+
+1. Go into the `matsim-lausitz` directory.
+1. Type `git pull`
+
+(Or use your IDE, e.g. Eclipse, IntelliJ, to update the repository.)
+
+This will update your repository to the newest version.
+
+----
+## Run the MATSim Lausitz scenario ...
+
 (Requires either cloning or downloading the repository.)
+
+<details>
+<summary>    
+    <h3>... using a runnable jar file</h3>
+</summary>
+
+1. Depending on the version of matsim-lausitz you have selected, you might have to create the jar file yourself.
+    1. You can build an executable jar-file by executing one of the following commands in the top directory.
+       This will download all necessary dependencies (it might take a while the first time it is run) and dump the jar into the top directory.
+        1. `./mvnw clean package -DskipTests=true`
+        1. or on Windows: `mvnw.cmd clean package -DskipTests=true`
+
+1. Double-click on that .jar file (in a file system browser). Alternatively, try opening it with the following command:``
+   java -jar [FILENAME].jar
+   ``
+1. A simple GUI should open.
+1. In the GUI, click on the "Choose" button for configuration file.  Navigate to one of the `input` directories and load one of the configuration files.
+1. Increase memory in the GUI.
+1. Press the "Start MATSim" button.  This should run MATSim.  Note that MATSim accepts URLs as filenames in its config, so while the config files are part of the git repo, running them will pull additional material from our server.
+1. "Open" the output directory.  You can drag files into VIA as was already done above.
+1. "Edit..." (in the GUI) the config file.  Re-run MATSim.
+
+</details>
+<details>
+    <summary>
+<h3>... using an IDE, e.g. Eclipse, IntelliJ - Alternative 1: use cloned/downloaded matsim-lausitz repository</h3>
+    </summary>
 
 1. Set up the project in your IDE.
 1. Make sure the project is configured as maven project.
-1. Run the JAVA class `src/main/java/org/matsim/run/RunLausitzScenario.java`.
+1. Run the JAVA class [RunLausitzScenario.java](src%2Fmain%2Fjava%2Forg%2Fmatsim%2Frun%2FRunLausitzScenario.java).
 1. "Open" the output directory.  You can drag files into VIA as was already done above.
 1. Edit the config file or adjust the run class. Re-run MATSim.
+</details>
 
-##### ... using a runnable jar file
-(Requires either cloning or downloading the repository and java)
+---
+## More information
 
-1. Open the cmd and go to your project directory
-2. Build the scenario using `mvnw package` 
-3. There should be a file directly in the `matsim-lausitz` directory with name approximately as `matsim-lausitz-1.0.jar`.
-4. Run this file from the command line using `java -jar matsim-lausitz-1.0.jar --help` to see all possible options.
-    1. For example, one can disable lanes or run the 25pct scenario using the available options
-5. Start this scenario using the default config by running `java -jar matsim-lausitz-1.0.jar`
-6. "Open" the output directory.  You can drag files into VIA as was already done above.
+For more information about MATSim, see here: https://www.matsim.org/

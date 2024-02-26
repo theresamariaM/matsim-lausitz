@@ -5,10 +5,7 @@ import geopandas as gpd
 import os
 import pandas as pd
 
-try:
-    from matsim import calibration
-except:
-    import calibration
+from matsim.calibration import create_calibration, ASCCalibrator, utils, analysis
 
 # %%
 
@@ -16,7 +13,7 @@ if os.path.exists("mid.csv"):
     srv = pd.read_csv("mid.csv")
     sim = pd.read_csv("sim.csv")
 
-    _, adj = calibration.calc_adjusted_mode_share(sim, srv)
+    _, adj = analysis.calc_adjusted_mode_share(sim, srv)
 
     print(srv.groupby("mode").sum())
 
@@ -30,10 +27,10 @@ if os.path.exists("mid.csv"):
 modes = ["walk", "car", "ride", "pt", "bike"]
 fixed_mode = "walk"
 initial = {
-    "bike": -0.141210,
-    "pt": 0,
-    "car": 0,
-    "ride": -2.22873502992
+    "bike": -3.35,
+    "pt": -1.92,
+    "car": -0.79,
+    "ride": -0.76
 }
 
 # Based on MiD 2017, filtered on Lausitz region
@@ -64,16 +61,17 @@ def filter_modes(df):
     return df[df.main_mode.isin(modes)]
 
 
-study, obj = calibration.create_mode_share_study("calib", "matsim-lausitz-1.x-SNAPSHOT-e8458e3.jar",
-                                                 "../input/v1.0/lausitz-v1.0-100pct.config.xml",
-                                                 modes, target,
-                                                 initial_asc=initial,
-                                                 args="--25pct",
-                                                 jvm_args="-Xmx60G -Xmx60G -XX:+AlwaysPreTouch -XX:+UseParallelGC",
-                                                 transform_persons=filter_persons, transform_trips=filter_modes,
-                                                 lr=calibration.linear_lr_scheduler(start=0.3, interval=8),
-                                                 chain_runs=calibration.default_chain_scheduler)
+study, obj = create_calibration(
+    "calib",
+    ASCCalibrator(modes, initial, target, lr=utils.linear_lr_scheduler(start=0.3, interval=12)),
+    "matsim-lausitz-1.x-SNAPSHOT-20c8ab3.jar",
+    "../input/v1.0/lausitz-v1.0-25pct.config.xml",
+    args="--25pct",
+    jvm_args="-Xmx60G -Xmx60G -XX:+AlwaysPreTouch -XX:+UseParallelGC",
+    transform_persons=filter_persons, transform_trips=filter_modes,
+    chain_runs=utils.default_chain_scheduler
+)
 
 # %%
 
-study.optimize(obj, 10)
+study.optimize(obj, 8)

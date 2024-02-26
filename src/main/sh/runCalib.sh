@@ -1,11 +1,12 @@
 #!/bin/bash --login
-#$ -l h_rt=790000
-#$ -j y
-#$ -m a
-#$ -cwd
-#$ -pe mp 12
-#$ -l mem_free=6G
-#$ -N calib-lausitz
+#SBATCH --time=200:00:00
+#SBATCH --partition=smp
+#SBATCH --output=logfile_%x-%j.log
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=12
+#SBATCH --mem=48G
+#SBATCH --job-name=lausitz-calib
 
 date
 hostname

@@ -2,7 +2,8 @@
 <!DOCTYPE config SYSTEM "http://www.matsim.org/files/dtd/config_v2.dtd">
 <config>
 	<module name="TimeAllocationMutator">
-		<param name="mutationRange" value="7200.0"/>
+		<param name="mutationRange" value="1800.0"/>
+		<param name="mutateAroundInitialEndTimeOnly" value="true"/>
 	</module>
 
 	<module name="controller">

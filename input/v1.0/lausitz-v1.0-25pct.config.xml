@@ -25,13 +25,13 @@
 
 	<module name="network">
 		<param name="inputNetworkFile"
-			   value="./lausitz-v1.0-network-with-pt.xml.gz"/>
+			   value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-network-with-pt.xml.gz"/>
 		<param name="laneDefinitionsFile" value="null"/>
 	</module>
 
 	<module name="plans">
 		<param name="inputPlansFile"
-			   value="./lausitz-v1.0-25pct.plans-initial.xml.gz"/>
+			   value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-25pct.plans-initial.xml.gz"/>
 		<param name="removingUnnecessaryPlanAttributes" value="true"/>
 	</module>
 
@@ -40,13 +40,13 @@
 	</module>
 
 	<module name="transit">
-		<param name="transitScheduleFile" value="./lausitz-v1.0-transitSchedule.xml.gz"/>
-		<param name="vehiclesFile"  value="./lausitz-v1.0-transitVehicles.xml.gz"/>
+		<param name="transitScheduleFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-transitSchedule.xml.gz"/>
+		<param name="vehiclesFile"  value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-transitVehicles.xml.gz"/>
 		<param name="useTransit" value="true"/>
 	</module>
 
 	<module name="counts">
-		<param name="inputCountsFile" value="./lausitz-v1.0-counts-car-bast.xml.gz"/>
+		<param name="inputCountsFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-counts-car-bast.xml.gz"/>
 	</module>
 
 	<module name="routing">
@@ -86,7 +86,7 @@
 		</parameterset>
 	</module>
 
-	<module name="ReplanningAnnealer" >
+	<module name="replanningAnnealer" >
 		<param name="activateAnnealingModule" value="true" />
 		<parameterset type="AnnealingVariable" >
 			<param name="annealParameter" value="globalInnovationRate" />
@@ -167,14 +167,14 @@
 			<param name="performing" value="6.67"/>
 
 			<parameterset type="modeParams">
-				<param name="constant" value="-1.4"/>
+				<param name="constant" value="-0.5440372906374353"/>
 				<param name="marginalUtilityOfTraveling_util_hr" value="-0.5"/>
 				<param name="mode" value="car"/>
 				<param name="monetaryDistanceRate" value="-0.00025"/>
 				<param name="dailyMonetaryConstant" value="-13.22"/>
 			</parameterset>
 			<parameterset type="modeParams">
-				<param name="constant" value="-0.0"/>
+				<param name="constant" value="-0.5296529002103979"/>
 				<!-- #(2.0+1.0)*6+(2.0+1)*0.5 -->
 				<param name="marginalUtilityOfTraveling_util_hr" value="-19.5"/>
 				<param name="mode" value="ride"/>
@@ -182,13 +182,13 @@
 				<param name="dailyMonetaryConstant" value="-0.0"/>
 			</parameterset>
 			<parameterset type="modeParams">
-				<param name="constant" value="-0.7"/>
+				<param name="constant" value="-1.969358424911853"/>
 				<param name="marginalUtilityOfTraveling_util_hr" value="-2.0"/>
 				<param name="mode" value="pt"/>
 				<param name="dailyMonetaryConstant" value="-2.3"/>
 			</parameterset>
 			<parameterset type="modeParams">
-				<param name="constant" value="-1.9"/>
+				<param name="constant" value="-4.314987209292666"/>
 				<param name="marginalUtilityOfTraveling_util_hr" value="-2.5"/>
 				<param name="mode" value="bike"/>
 			</parameterset>

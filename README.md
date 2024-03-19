@@ -1,6 +1,6 @@
 # The MATSim Open Lausitz Scenario
 
-![Build Status](https://github.com/matsim-scenarios/matsim-lausitz/workflows/build/badge.svg?branch=main)
+[![build](https://github.com/matsim-scenarios/matsim-lausitz/actions/workflows/build.yaml/badge.svg)](https://github.com/matsim-scenarios/matsim-lausitz/actions/workflows/build.yaml)
 ![license](https://img.shields.io/github/license/matsim-scenarios/matsim-lausitz.svg)
 ![JDK](https://img.shields.io/badge/JDK-17+-green.svg)
 
@@ -82,9 +82,9 @@ This will update your repository to the newest version.
 
 (Requires either cloning or downloading the repository.)
 
-<details>
-<summary>    
-    <h3>... using a runnable jar file</h3>
+<details><summary>
+    
+### ... using a runnable jar file
 </summary>
 
 1. Depending on the version of matsim-lausitz you have selected, you might have to create the jar file yourself.
@@ -104,10 +104,10 @@ This will update your repository to the newest version.
 1. "Edit..." (in the GUI) the config file.  Re-run MATSim.
 
 </details>
-<details>
-    <summary>
-<h3>... using an IDE, e.g. Eclipse, IntelliJ - Alternative 1: use cloned/downloaded matsim-lausitz repository</h3>
-    </summary>
+<details><summary>
+
+### ... using an IDE, e.g. Eclipse, IntelliJ
+</summary>
 
 1. Set up the project in your IDE.
 1. Make sure the project is configured as maven project.

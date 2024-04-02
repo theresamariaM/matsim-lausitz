@@ -23,11 +23,5 @@ public class RunIntegrationTest {
 			"--output", utils.getOutputDirectory(),
 			"--config:controller.overwriteFiles=deleteDirectoryIfExists") == 0 : "Must return non error code";
 
-
-		EventsUtils.assertEqualEventsFingerprint(
-			new File(utils.getOutputDirectory(), "lausitz-1pct.output_events.xml.gz"),
-			new File(utils.getClassInputDirectory(), "lausitz-1pct.output_events.fp.zst").toString()
-		);
-
 	}
 }

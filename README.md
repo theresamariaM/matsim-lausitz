@@ -36,7 +36,7 @@ Handling of large files within git is not without problems (git lfs files are no
 
 1. Open SimWrapper at https://simwrapper.github.io/site/ .
 1. Select Explore Data Sources -> VSP Public-SVN .
-1. Navigate to de -> lausitz -> lausitz-v1.0 (https://simwrapper.github.io/site/public/de/lausitz/lausitz-v1.0).
+1. Navigate to de -> lausitz -> lausitz-v1.0 (https://simwrapper.github.io/site/public/de/lausitz/output/v1.0).
 1. Enjoy the dashboards and visualizations.
 
 ### Run VIA on output files

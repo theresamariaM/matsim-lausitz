@@ -56,7 +56,7 @@ public class LausitzScenario extends MATSimApplication {
 	}
 
 	public LausitzScenario() {
-		super(String.format("input/v%s/lausitz-v%s-25pct.config.xml", VERSION, VERSION));
+		super(String.format("input/v%s/lausitz-v%s-1pct.config.xml", VERSION, VERSION));
 	}
 
 	public static void main(String[] args) {

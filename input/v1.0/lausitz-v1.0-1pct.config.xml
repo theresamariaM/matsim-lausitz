@@ -7,7 +7,7 @@
 	</module>
 
 	<module name="controller">
-		<param name="lastIteration" value="3"/>
+		<param name="lastIteration" value="100"/>
 		<param name="overwriteFiles" value="failIfDirectoryExists"/>
 		<param name="runId" value="lausitz-1pct"/>
 		<param name="outputDirectory" value="./output/output-lausitz-1pct"/>
@@ -31,7 +31,7 @@
 
 	<module name="plans">
 		<param name="inputPlansFile"
-			   value="./1pct-plans-initial.xml.gz"/>
+			   value="./lausitz-v.1.0-1pct.plans-only-persons-with-car-legs.xml"/>
 		<param name="removingUnnecessaryPlanAttributes" value="true"/>
 	</module>
 
@@ -112,11 +112,13 @@
 			<param name="subpopulation" value="person"/>
 			<param name="weight" value="0.10"/>
 		</parameterset>
+		<!--
 		<parameterset type="strategysettings">
 			<param name="strategyName" value="SubtourModeChoice"/>
 			<param name="subpopulation" value="person"/>
 			<param name="weight" value="0.10"/>
 		</parameterset>
+		-->
 		<parameterset type="strategysettings">
 			<param name="strategyName" value="TimeAllocationMutator"/>
 			<param name="subpopulation" value="person"/>
@@ -134,7 +136,7 @@
 			<param name="weight" value="0.05"/>
 		</parameterset>
 	</module>
-
+	<!--
 	<module name="subtourModeChoice">
 		<param name="chainBasedModes" value="car,bike"/>
 		<param name="modes" value="car"/>
@@ -143,7 +145,7 @@
 		<param name="probaForRandomSingleTripMode" value="0.5" />
 		<param name="coordDistance" value="100"/>
 	</module>
-
+	-->
 	<module name="transitRouter">
 		<param name="extensionRadius" value="500.0"/>
 	</module>

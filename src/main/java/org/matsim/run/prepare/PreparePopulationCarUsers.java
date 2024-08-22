@@ -32,18 +32,16 @@ import java.util.List;
 public class PreparePopulationCarUsers {
 	private static final Logger log = LogManager.getLogger(PreparePopulationCarUsers.class);
 	public static void main ( String [] args ) {
-		final String outputFilePopulation = "./input/v1.0/1pct-plans-car-users-only-v2.xml.gz";
-		Config config = ConfigUtils.loadConfig("./input/v1.0/lausitz-v1.0-1pct.config.xml");
+		final String outputFilePopulation = "./input/v1.1/lausitz-v.1.1-1pct-plans-car-users-only.xml.gz";
+		Config config = ConfigUtils.loadConfig("./input/v1.1/lausitz-v1.1-1pct.config.xml");
 		Scenario scenario = ScenarioUtils.loadScenario( config );
 		Population population = scenario.getPopulation();
 		List<Id<Person>> NonCarUsers = new ArrayList<>();
 		for (Person person : population.getPersons().values()) {
-			System.out.println("entering person for loop");
+
 			Plan plan = person.getSelectedPlan();
 			boolean containsCarLeg = false;
 			for(Leg leg: TripStructureUtils.getLegs(plan)){
-				System.out.println("entering leg for loop");
-				System.out.println("TransportMode.car.equals( leg.getMode() ) "+ TransportMode.car.equals( leg.getMode() ));
 				if(TransportMode.car.equals( leg.getMode() ) ){
 					containsCarLeg = true;
 					break;
@@ -51,13 +49,11 @@ public class PreparePopulationCarUsers {
 			}
 
 			if(!containsCarLeg){
-				System.out.println("entering if (!containsCarLeg)");
 				NonCarUsers.add(person.getId());
 			}
 
 
 		}
-		System.out.println("NonCarUsers[1:10] " + NonCarUsers.get(1));
 
 		for (Id<Person> personId : NonCarUsers) {
 			population.removePerson(personId);

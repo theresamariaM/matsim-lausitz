@@ -45,10 +45,10 @@ import java.util.Set;
 })
 public class LausitzScenario extends MATSimApplication {
 
-	public static final String VERSION = "1.0";
+	public static final String VERSION = "2024.2-car-users-only";
 
 	@CommandLine.Mixin
-	private final SampleOptions sample = new SampleOptions( 25, 10, 1);
+	private final SampleOptions sample = new SampleOptions( 50,20, 10, 5,1);
 
 
 	public LausitzScenario(@Nullable Config config) {
@@ -56,10 +56,11 @@ public class LausitzScenario extends MATSimApplication {
 	}
 
 	public LausitzScenario() {
-		super(String.format("input/v%s/lausitz-v%s-1pct.config.xml", VERSION, VERSION));
+		super(String.format("/home/lola/IdeaProjects/matsim-lausitz/input/v2024.2-car-users-only/lausitz-v2024.2-car-users-only-1pct-1.config.xml", VERSION, VERSION));
 	}
 
 	public static void main(String[] args) {
+
 		MATSimApplication.run(LausitzScenario.class, args);
 	}
 

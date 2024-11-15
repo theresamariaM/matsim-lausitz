@@ -4,43 +4,40 @@ import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.*;
-import org.matsim.application.MATSimAppCommand;
-import org.matsim.application.prepare.population.ExtractHomeCoordinates;
-import org.matsim.core.population.PersonUtils;
-import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.router.TripStructureUtils;
-import picocli.CommandLine;
 import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.scenario.ScenarioUtils;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@CommandLine.Command(
-	name = "population",
-	description = "Prepares  populations such that only people with car uses remain."
-)
 
+/**
+ * Reduce population to car users only.
+ */
 
-public class PreparePopulationCarUsers {
-	private static final Logger log = LogManager.getLogger(PreparePopulationCarUsers.class);
-	public static void main ( String [] args ) {
-		final String outputFilePopulation = "./input/v1.1/lausitz-v.1.1-1pct-plans-car-users-only.xml.gz";
-		Config config = ConfigUtils.loadConfig("./input/v1.1/lausitz-v1.1-1pct.config.xml");
+final class PreparePopulationCarUsers {
+	private PreparePopulationCarUsers(){
+		//not called
+	}
+	private final static  Logger Log = LogManager.getLogger(PreparePopulationCarUsers.class);
+	public static void main( String [] args ) {
+		final String outputFilePopulation = "./input/v2024.2-car-users-only/lausitz-v2024.2-100-pct-plans.xml.gz";
+		Config config = ConfigUtils.loadConfig("./input/v2024.2/lausitz-v2024.2-100pct.config.xml");
 		Scenario scenario = ScenarioUtils.loadScenario( config );
 		Population population = scenario.getPopulation();
-		List<Id<Person>> NonCarUsers = new ArrayList<>();
-		for (Person person : population.getPersons().values()) {
+		List<Id<Person>> nonCarUsers = new ArrayList<>();
+		List<Id<Person>> notAPerson = new ArrayList<>();
 
+		for(Person person : population.getPersons().values()) {
+			if(!person.getAttributes().getAttribute("subpopulation").equals("person")){
+				notAPerson.add(person.getId());
+			}
 			Plan plan = person.getSelectedPlan();
 			boolean containsCarLeg = false;
+
 			for(Leg leg: TripStructureUtils.getLegs(plan)){
 				if(TransportMode.car.equals( leg.getMode() ) ){
 					containsCarLeg = true;
@@ -49,17 +46,22 @@ public class PreparePopulationCarUsers {
 			}
 
 			if(!containsCarLeg){
-				NonCarUsers.add(person.getId());
+				nonCarUsers.add(person.getId());
 			}
 
 
 		}
 
-		for (Id<Person> personId : NonCarUsers) {
+		for (Id<Person> personId : nonCarUsers) {
 			population.removePerson(personId);
 		}
+
+		for (Id<Person> personId : notAPerson) {
+			population.removePerson(personId);
+		}
+
 		new PopulationWriter(population, scenario.getNetwork()).write(outputFilePopulation);
-		log.info("Population written to:" + outputFilePopulation);
+		Log.info("Population written to:" + outputFilePopulation);
 
 
 	}

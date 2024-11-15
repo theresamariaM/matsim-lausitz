@@ -19,7 +19,7 @@ public class RunIntegrationTest {
 		assert MATSimApplication.execute(LausitzScenario.class,
 			"--1pct",
 			"--iterations", "1",
-			"--config:plans.inputPlansFile", "https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v1.0/lausitz-v1.0-1pct.plans-initial.xml.gz",
+			"--config:plans.inputPlansFile", "/home/lola/IdeaProjects/matsim-lausitz/input/v2024.2-car-users-only/0.1/lausitz-v2024.2-0.1-pct-plans-1.xml.gz",
 			"--output", utils.getOutputDirectory(),
 			"--config:controller.overwriteFiles=deleteDirectoryIfExists") == 0 : "Must return non error code";
 

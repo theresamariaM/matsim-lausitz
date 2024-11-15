@@ -24,7 +24,7 @@ import java.util.SplittableRandom;
 )
 public class PreparePopulation implements MATSimAppCommand {
 
-	private static final Logger log = LogManager.getLogger(PreparePopulation.class);
+	private static final Logger LOG = LogManager.getLogger(PreparePopulation.class);
 
 	private final SplittableRandom rnd = new SplittableRandom(1234);
 
@@ -46,7 +46,7 @@ public class PreparePopulation implements MATSimAppCommand {
 	public Integer call() throws Exception {
 
 		if (!Files.exists(input)) {
-			log.error("Input population does not exist: {}", input);
+			LOG.error("Input population does not exist: {}", input);
 			return 2;
 		}
 

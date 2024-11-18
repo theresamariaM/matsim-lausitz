@@ -2,8 +2,8 @@ package org.matsim.run.prepare;
 
 import org.matsim.api.core.v01.Id;
 import org.matsim.api.core.v01.Scenario;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+// import org.apache.logging.log4j.LogManager;
+// import org.apache.logging.log4j.Logger;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.core.router.TripStructureUtils;
@@ -22,7 +22,7 @@ final class PreparePopulationCarUsers {
 	private PreparePopulationCarUsers(){
 		//not called
 	}
-	private final static  Logger Log = LogManager.getLogger(PreparePopulationCarUsers.class);
+	// private static final Logger log = LogManager.getLogger(PreparePopulationCarUsers.class);
 	public static void main( String [] args ) {
 		final String outputFilePopulation = "./input/v2024.2-car-users-only/lausitz-v2024.2-100-pct-plans.xml.gz";
 		Config config = ConfigUtils.loadConfig("./input/v2024.2/lausitz-v2024.2-100pct.config.xml");
@@ -61,7 +61,7 @@ final class PreparePopulationCarUsers {
 		}
 
 		new PopulationWriter(population, scenario.getNetwork()).write(outputFilePopulation);
-		Log.info("Population written to:" + outputFilePopulation);
+		// log.info("Population written to:" + outputFilePopulation);
 
 
 	}

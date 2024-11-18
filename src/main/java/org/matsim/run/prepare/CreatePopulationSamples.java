@@ -1,7 +1,7 @@
 package org.matsim.run.prepare;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+// import org.apache.logging.log4j.Logger;
 import org.matsim.api.core.v01.population.Population;
 import org.matsim.core.population.PopulationUtils;
 
@@ -13,7 +13,7 @@ final class CreatePopulationSamples {
 	private CreatePopulationSamples() {
 		// not called
 	}
-	private static final Logger LOG = LogManager.getLogger(CreatePopulationSamples.class);
+	//private static final Logger log = LogManager.getLogger(CreatePopulationSamples.class);
 	public static void main(String[] args) {
 
 
@@ -36,7 +36,7 @@ final class CreatePopulationSamples {
 					String versionNr = Integer.toString(i);
 					String outputFilePopulation = outputFilePopulationPart1 + sampleSizeString + outputFilePopulationPart3 + space + versionNr + outputFilePopulationPart5;
 
-					LOG.info("Writing {} sample to {}", sampleSize, outputFilePopulation);
+					// log.info("Writing {} sample to {}", sampleSize, outputFilePopulation);
 					PopulationUtils.writePopulation(population, outputFilePopulation);
 				}
 			}else{
@@ -46,7 +46,7 @@ final class CreatePopulationSamples {
 				String pathToPopulation = "/home/lola/IdeaProjects/matsim-lausitz/input/v2024.2-car-users-only/lausitz-v2024.2-100-pct-plans.xml.gz";
 				Population population = PopulationUtils.readPopulation(pathToPopulation);
 				PopulationUtils.sampleDown(population, sampleSize);
-				LOG.info("Writing {} sample to {}", sampleSize, outputFilePopulation);
+				// log.info("Writing {} sample to {}", sampleSize, outputFilePopulation);
 				PopulationUtils.writePopulation(population,outputFilePopulation);
 			}
 		}

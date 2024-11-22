@@ -53,33 +53,32 @@ import java.util.Set;
 
 @CommandLine.Command(header = ":: Open Lausitz Scenario ::", version = LausitzScenario.VERSION, mixinStandardHelpOptions = true)
 @MATSimApplication.Prepare({
-		CreateNetworkFromSumo.class, CreateTransitScheduleFromGtfs.class, TrajectoryToPlans.class, GenerateShortDistanceTrips.class,
-		MergePopulations.class, ExtractRelevantFreightTrips.class, DownSamplePopulation.class, ExtractHomeCoordinates.class, CleanNetwork.class,
-		CreateLandUseShp.class, ResolveGridCoordinates.class, FixSubtourModes.class, AdjustActivityToLinkDistances.class, XYToLinks.class,
-		SplitActivityTypesDuration.class, CreateCountsFromBAStData.class, PreparePopulation.class, CleanPopulation.class, PrepareNetwork.class,
-		PrepareDrtScenarioAgents.class
+	CreateNetworkFromSumo.class, CreateTransitScheduleFromGtfs.class, TrajectoryToPlans.class, GenerateShortDistanceTrips.class,
+	MergePopulations.class, ExtractRelevantFreightTrips.class, DownSamplePopulation.class, ExtractHomeCoordinates.class, CleanNetwork.class,
+	CreateLandUseShp.class, ResolveGridCoordinates.class, FixSubtourModes.class, AdjustActivityToLinkDistances.class, XYToLinks.class,
+	SplitActivityTypesDuration.class, CreateCountsFromBAStData.class, PreparePopulation.class, CleanPopulation.class, PrepareNetwork.class,
+	PrepareDrtScenarioAgents.class
 })
 @MATSimApplication.Analysis({
-		LinkStats.class, CheckPopulation.class, CommuterAnalysis.class, CommunityFilter.class, DistanceMatrix.class
+	LinkStats.class, CheckPopulation.class, CommuterAnalysis.class, CommunityFilter.class, DistanceMatrix.class
 })
 public class LausitzScenario extends MATSimApplication {
 
-	public static final String VERSION = "2024.2";
+	public static final String VERSION = "2024.2-car-users-only";
 	public static final String FREIGHT = "longDistanceFreight";
-	private static final String AVERAGE = "average";
 	public static final String HEAVY_MODE = "truck40t";
 	public static final String MEDIUM_MODE = "truck18t";
 	public static final String LIGHT_MODE = "truck8t";
-
-//	To decrypt hbefa input files set MATSIM_DECRYPTION_PASSWORD as environment variable. ask VSP for access.
+	private static final String AVERAGE = "average";
+	//	To decrypt hbefa input files set MATSIM_DECRYPTION_PASSWORD as environment variable. ask VSP for access.
 	private static final String HBEFA_2020_PATH = "https://svn.vsp.tu-berlin.de/repos/public-svn/3507bb3997e5657ab9da76dbedbb13c9b5991d3e/0e73947443d68f95202b71a156b337f7f71604ae/";
 	private static final String HBEFA_FILE_COLD_DETAILED = HBEFA_2020_PATH + "82t7b02rc0rji2kmsahfwp933u2rfjlkhfpi2u9r20.enc";
 	private static final String HBEFA_FILE_WARM_DETAILED = HBEFA_2020_PATH + "944637571c833ddcf1d0dfcccb59838509f397e6.enc";
-	private static final String HBEFA_FILE_COLD_AVERAGE = HBEFA_2020_PATH + "r9230ru2n209r30u2fn0c9rn20n2rujkhkjhoewt84202.enc" ;
+	private static final String HBEFA_FILE_COLD_AVERAGE = HBEFA_2020_PATH + "r9230ru2n209r30u2fn0c9rn20n2rujkhkjhoewt84202.enc";
 	private static final String HBEFA_FILE_WARM_AVERAGE = HBEFA_2020_PATH + "7eff8f308633df1b8ac4d06d05180dd0c5fdf577.enc";
 
 	@CommandLine.Mixin
-	SampleOptions sample = new SampleOptions( 100, 25, 10, 1);
+	SampleOptions sample = new SampleOptions(100, 50, 20, 10, 5, 1);
 
 	@CommandLine.Option(names = "--emissions", defaultValue = "PERFORM_EMISSIONS_ANALYSIS", description = "Define if emission analysis should be performed or not.")
 	EmissionAnalysisHandling emissions;
@@ -94,7 +93,7 @@ public class LausitzScenario extends MATSimApplication {
 	}
 
 	public LausitzScenario() {
-		super(String.format("input/v%s/lausitz-v%s-10pct.config.xml", VERSION, VERSION));
+		super(String.format("input/v%s/lausitz-v%s-1pct-1.config.xml", VERSION, VERSION));
 	}
 
 	public LausitzScenario(SampleOptions sample, EmissionAnalysisHandling handling) {
@@ -104,6 +103,106 @@ public class LausitzScenario extends MATSimApplication {
 
 	public static void main(String[] args) {
 		MATSimApplication.run(LausitzScenario.class, args);
+	}
+
+	/**
+	 * Prepare the config for commercial traffic.
+	 */
+	public static void prepareCommercialTrafficConfig(Config config) {
+
+		Set<String> modes = Set.of(HEAVY_MODE, MEDIUM_MODE, LIGHT_MODE);
+
+		modes.forEach(mode -> {
+			ScoringConfigGroup.ModeParams thisModeParams = new ScoringConfigGroup.ModeParams(mode);
+			config.scoring().addModeParams(thisModeParams);
+		});
+
+		Set<String> qsimModes = new HashSet<>(config.qsim().getMainModes());
+		config.qsim().setMainModes(Sets.union(qsimModes, modes));
+
+		Set<String> networkModes = new HashSet<>(config.routing().getNetworkModes());
+		config.routing().setNetworkModes(Sets.union(networkModes, modes));
+
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("commercial_start").setTypicalDuration(30 * 60.));
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("commercial_end").setTypicalDuration(30 * 60.));
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("service").setTypicalDuration(30 * 60.));
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("start").setTypicalDuration(30 * 60.));
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("end").setTypicalDuration(30 * 60.));
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("freight_start").setTypicalDuration(30 * 60.));
+		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("freight_end").setTypicalDuration(30 * 60.));
+
+		for (String subpopulation : List.of("commercialPersonTraffic", "commercialPersonTraffic_service", "goodsTraffic")) {
+			config.replanning().addStrategySettings(
+				new ReplanningConfigGroup.StrategySettings()
+					.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta)
+					.setWeight(0.85)
+					.setSubpopulation(subpopulation)
+			);
+
+			config.replanning().addStrategySettings(
+				new ReplanningConfigGroup.StrategySettings()
+					.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute)
+					.setWeight(0.1)
+					.setSubpopulation(subpopulation)
+			);
+		}
+	}
+
+	public static void setEmissionsConfigs(Config config) {
+		EmissionsConfigGroup eConfig = ConfigUtils.addOrGetModule(config, EmissionsConfigGroup.class);
+		eConfig.setDetailedColdEmissionFactorsFile(HBEFA_FILE_COLD_DETAILED);
+		eConfig.setDetailedWarmEmissionFactorsFile(HBEFA_FILE_WARM_DETAILED);
+		eConfig.setAverageColdEmissionFactorsFile(HBEFA_FILE_COLD_AVERAGE);
+		eConfig.setAverageWarmEmissionFactorsFile(HBEFA_FILE_WARM_AVERAGE);
+		eConfig.setHbefaTableConsistencyCheckingLevel(EmissionsConfigGroup.HbefaTableConsistencyCheckingLevel.consistent);
+		eConfig.setDetailedVsAverageLookupBehavior(EmissionsConfigGroup.DetailedVsAverageLookupBehavior.tryDetailedThenTechnologyAverageThenAverageTable);
+	}
+
+	/**
+	 * Prepare vehicle types with necessary HBEFA information for emission analysis.
+	 */
+	public static void prepareVehicleTypesForEmissionAnalysis(Scenario scenario) {
+		for (VehicleType type : scenario.getVehicles().getVehicleTypes().values()) {
+			EngineInformation engineInformation = type.getEngineInformation();
+
+//				only set engine information if none are present
+			if (engineInformation.getAttributes().isEmpty()) {
+				switch (type.getId().toString()) {
+					case TransportMode.car -> {
+						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.PASSENGER_CAR.toString());
+						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
+					}
+					case TransportMode.ride -> {
+//							ignore ride, the mode routed on network, but then teleported
+						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.NON_HBEFA_VEHICLE.toString());
+						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
+					}
+					case FREIGHT -> {
+						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.HEAVY_GOODS_VEHICLE.toString());
+						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
+					}
+					case TransportMode.bike -> {
+//							ignore bikes
+						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.NON_HBEFA_VEHICLE.toString());
+						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
+						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
+					}
+					default -> throw new IllegalArgumentException("does not know how to handle vehicleType " + type.getId().toString());
+				}
+			}
+		}
+
+//			ignore all pt veh types
+		scenario.getTransitVehicles()
+			.getVehicleTypes()
+			.values().forEach(type -> VehicleUtils.setHbefaVehicleCategory(type.getEngineInformation(), HbefaVehicleCategory.NON_HBEFA_VEHICLE.toString()));
 	}
 
 	@Nullable
@@ -208,106 +307,6 @@ public class LausitzScenario extends MATSimApplication {
 			}
 
 		});
-	}
-
-	/**
-	 * Prepare the config for commercial traffic.
-	 */
-	public static void prepareCommercialTrafficConfig(Config config) {
-
-		Set<String> modes = Set.of(HEAVY_MODE, MEDIUM_MODE, LIGHT_MODE);
-
-		modes.forEach(mode -> {
-			ScoringConfigGroup.ModeParams thisModeParams = new ScoringConfigGroup.ModeParams(mode);
-			config.scoring().addModeParams(thisModeParams);
-		});
-
-		Set<String> qsimModes = new HashSet<>(config.qsim().getMainModes());
-		config.qsim().setMainModes(Sets.union(qsimModes, modes));
-
-		Set<String> networkModes = new HashSet<>(config.routing().getNetworkModes());
-		config.routing().setNetworkModes(Sets.union(networkModes, modes));
-
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("commercial_start").setTypicalDuration(30 * 60.));
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("commercial_end").setTypicalDuration(30 * 60.));
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("service").setTypicalDuration(30 * 60.));
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("start").setTypicalDuration(30 * 60.));
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("end").setTypicalDuration(30 * 60.));
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("freight_start").setTypicalDuration(30 * 60.));
-		config.scoring().addActivityParams(new ScoringConfigGroup.ActivityParams("freight_end").setTypicalDuration(30 * 60.));
-
-		for (String subpopulation : List.of("commercialPersonTraffic", "commercialPersonTraffic_service", "goodsTraffic")) {
-			config.replanning().addStrategySettings(
-				new ReplanningConfigGroup.StrategySettings()
-					.setStrategyName(DefaultPlanStrategiesModule.DefaultSelector.ChangeExpBeta)
-					.setWeight(0.85)
-					.setSubpopulation(subpopulation)
-			);
-
-			config.replanning().addStrategySettings(
-				new ReplanningConfigGroup.StrategySettings()
-					.setStrategyName(DefaultPlanStrategiesModule.DefaultStrategy.ReRoute)
-					.setWeight(0.1)
-					.setSubpopulation(subpopulation)
-			);
-		}
-	}
-
-	public static void setEmissionsConfigs(Config config) {
-		EmissionsConfigGroup eConfig = ConfigUtils.addOrGetModule(config, EmissionsConfigGroup.class);
-		eConfig.setDetailedColdEmissionFactorsFile(HBEFA_FILE_COLD_DETAILED);
-		eConfig.setDetailedWarmEmissionFactorsFile(HBEFA_FILE_WARM_DETAILED);
-		eConfig.setAverageColdEmissionFactorsFile(HBEFA_FILE_COLD_AVERAGE);
-		eConfig.setAverageWarmEmissionFactorsFile(HBEFA_FILE_WARM_AVERAGE);
-		eConfig.setHbefaTableConsistencyCheckingLevel(EmissionsConfigGroup.HbefaTableConsistencyCheckingLevel.consistent);
-		eConfig.setDetailedVsAverageLookupBehavior(EmissionsConfigGroup.DetailedVsAverageLookupBehavior.tryDetailedThenTechnologyAverageThenAverageTable);
-	}
-
-	/**
-	 * Prepare vehicle types with necessary HBEFA information for emission analysis.
-	 */
-	public static void prepareVehicleTypesForEmissionAnalysis(Scenario scenario) {
-		for (VehicleType type : scenario.getVehicles().getVehicleTypes().values()) {
-			EngineInformation engineInformation = type.getEngineInformation();
-
-//				only set engine information if none are present
-			if (engineInformation.getAttributes().isEmpty()) {
-				switch (type.getId().toString()) {
-					case TransportMode.car -> {
-						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.PASSENGER_CAR.toString());
-						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
-					}
-					case TransportMode.ride -> {
-//							ignore ride, the mode routed on network, but then teleported
-						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.NON_HBEFA_VEHICLE.toString());
-						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
-					}
-					case FREIGHT -> {
-						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.HEAVY_GOODS_VEHICLE.toString());
-						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
-					}
-					case TransportMode.bike -> {
-//							ignore bikes
-						VehicleUtils.setHbefaVehicleCategory(engineInformation, HbefaVehicleCategory.NON_HBEFA_VEHICLE.toString());
-						VehicleUtils.setHbefaTechnology(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaSizeClass(engineInformation, AVERAGE);
-						VehicleUtils.setHbefaEmissionsConcept(engineInformation, AVERAGE);
-					}
-					default -> throw new IllegalArgumentException("does not know how to handle vehicleType " + type.getId().toString());
-				}
-			}
-		}
-
-//			ignore all pt veh types
-		scenario.getTransitVehicles()
-			.getVehicleTypes()
-			.values().forEach(type -> VehicleUtils.setHbefaVehicleCategory(type.getEngineInformation(), HbefaVehicleCategory.NON_HBEFA_VEHICLE.toString()));
 	}
 
 	/**

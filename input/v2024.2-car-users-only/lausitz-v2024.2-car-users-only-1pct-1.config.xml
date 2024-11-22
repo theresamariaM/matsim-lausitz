@@ -4,7 +4,7 @@
 	<module name="timeAllocationMutator">
 		<param name="mutationRange" value="1800.0"/>
 		<param name="mutateAroundInitialEndTimeOnly" value="true"/>
-<!--		what is this?; please convert boolean to enum!-->
+		<!--		what is this?; please convert boolean to enum!-->
 	</module>
 
 	<module name="controller">
@@ -26,13 +26,13 @@
 
 	<module name="network">
 		<param name="inputNetworkFile"
-			   value="/home/lola/IdeaProjects/matsim-lausitz/input/v2024.2-car-users-only/lausitz-v2024.2-network-with-pt.xml.gz"/>
+			   value="./lausitz-v2024.2-network-with-pt.xml.gz"/>
 		<param name="laneDefinitionsFile" value="null"/>
 	</module>
 
 	<module name="plans">
 		<param name="inputPlansFile"
-			   value="/home/lola/IdeaProjects/matsim-lausitz/input/v2024.2-car-users-only/0.01/lausitz-v2024.2-0.01-pct-plans-1.xml.gz"/>
+			   value="./0.01/lausitz-v2024.2-0.01-pct-plans-1.xml.gz"/>
 		<param name="removingUnnecessaryPlanAttributes" value="true"/>
 	</module>
 
@@ -42,7 +42,7 @@
 
 	<module name="transit">
 		<param name="transitScheduleFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v2024.2/lausitz-v2024.2-transitSchedule.xml.gz"/>
-		<param name="vehiclesFile"  value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v2024.2/lausitz-v2024.2-transitVehicles.xml.gz"/>
+		<param name="vehiclesFile" value="https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v2024.2/lausitz-v2024.2-transitVehicles.xml.gz"/>
 		<param name="useTransit" value="true"/>
 	</module>
 
@@ -80,30 +80,30 @@
 		<param name="insertingWaitingVehiclesBeforeDrivingVehicles" value="true"/>
 	</module>
 
-	<module name="simwrapper" >
-		<parameterset type="params" >
-			<param name="context" value="" />
-			<param name="mapCenter" value="14.5,51.53" />
-			<param name="mapZoomLevel" value="6.8" />
-			<param name="shp" value="../shp/lausitz.shp" />
+	<module name="simwrapper">
+		<parameterset type="params">
+			<param name="context" value=""/>
+			<param name="mapCenter" value="14.5,51.53"/>
+			<param name="mapZoomLevel" value="6.8"/>
+			<param name="shp" value="../shp/lausitz.shp"/>
 		</parameterset>
 	</module>
 
-	<module name="replanningAnnealer" >
-		<param name="activateAnnealingModule" value="true" />
-		<parameterset type="AnnealingVariable" >
-			<param name="annealParameter" value="globalInnovationRate" />
-<!--			globalInnovationRate: fraction of innovated agents is annealed-->
-			<param name="annealType" value="sigmoid" />
-<!--			sigmoid: see comment above shapeFactor-->
-			<param name="subpopulation" value="person" />
+	<module name="replanningAnnealer">
+		<param name="activateAnnealingModule" value="true"/>
+		<parameterset type="AnnealingVariable">
+			<param name="annealParameter" value="globalInnovationRate"/>
+			<!--			globalInnovationRate: fraction of innovated agents is annealed-->
+			<param name="annealType" value="sigmoid"/>
+			<!--			sigmoid: see comment above shapeFactor-->
+			<param name="subpopulation" value="person"/>
 			<!-- this parameter enters the exponential and sigmoid formulas. May be an iteration or a share, i.e. 0.5 for halfLife at 50% of iterations. Exponential: startValue / exp(it/halfLife) -->
-<!--			the exponential entry can be ignored-->
-			<param name="halfLife" value="0.5" />
+			<!--			the exponential entry can be ignored-->
+			<param name="halfLife" value="0.5"/>
 			<!-- sigmoid: 1/(1+e^(shapeFactor*(it - halfLife))); geometric: startValue * shapeFactor^it; msa: startValue / it^shapeFactor -->
-			<param name="shapeFactor" value="0.01" />
-			<param name="startValue" value="0.45" />
-			<param name="endValue" value="0.01" />
+			<param name="shapeFactor" value="0.01"/>
+			<param name="startValue" value="0.45"/>
+			<param name="endValue" value="0.01"/>
 		</parameterset>
 	</module>
 	<module name="replanning">
@@ -164,16 +164,16 @@
 				<param name="marginalUtilityOfTraveling_util_hr" value="0.0"/>
 				<param name="mode" value="car"/>
 				<param name="monetaryDistanceRate" value="-0.00025"/>
-<!--				the cost values come from: https://docs.google.com/spreadsheets/d/1HzWpmmws1dBJuo-1Z0TnJ6-w4vD7eXBTUUEu68Hl9Q4/edit#gid=180748432-->
+				<!--				the cost values come from: https://docs.google.com/spreadsheets/d/1HzWpmmws1dBJuo-1Z0TnJ6-w4vD7eXBTUUEu68Hl9Q4/edit#gid=180748432-->
 				<param name="dailyMonetaryConstant" value="-13.22"/>
 			</parameterset>
 			<parameterset type="modeParams">
 				<param name="constant" value="-0.404491897813024"/>
 				<param name="mode" value="ride"/>
-<!--				the following are set in code, see run class -->
-<!--				<param name="marginalUtilityOfTraveling_util_hr" value="-18.0"/>-->
-<!--				<param name="monetaryDistanceRate" value="-0.0005"/>-->
-<!--				<param name="dailyMonetaryConstant" value="-0.0"/>-->
+				<!--				the following are set in code, see run class -->
+				<!--				<param name="marginalUtilityOfTraveling_util_hr" value="-18.0"/>-->
+				<!--				<param name="monetaryDistanceRate" value="-0.0005"/>-->
+				<!--				<param name="dailyMonetaryConstant" value="-0.0"/>-->
 			</parameterset>
 			<parameterset type="modeParams">
 				<param name="constant" value="-1.9077150102017328"/>
@@ -195,7 +195,7 @@
 				<param name="marginalUtilityOfTraveling_util_hr" value="-10.0"/>
 				<param name="mode" value="longDistanceFreight"/>
 				<param name="monetaryDistanceRate" value="-0.002"/>
-<!--				-->
+				<!--				-->
 			</parameterset>
 
 		</parameterset>

@@ -27,13 +27,13 @@ import javax.annotation.Nullable;
  */
 public final class LausitzDrtScenario extends LausitzScenario {
 
-//	run params re drt are contained in separate class DrtOptions
+	//	run params re drt are contained in separate class DrtOptions
 	@CommandLine.ArgGroup(heading = "%nDrt options%n", exclusive = false, multiplicity = "0..1")
 	private final DrtOptions drtOpt = new DrtOptions();
 
 	private final LausitzScenario baseScenario = new LausitzScenario(sample, emissions);
 
-//	this constructor is needed when this class is to be called from external classes with a given Config (e.g. for testing).
+	//	this constructor is needed when this class is to be called from external classes with a given Config (e.g. for testing).
 	public LausitzDrtScenario(Config config) {
 		super(config);
 	}

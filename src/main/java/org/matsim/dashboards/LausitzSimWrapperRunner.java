@@ -53,13 +53,10 @@ import java.util.List;
 public final class LausitzSimWrapperRunner implements MATSimAppCommand {
 
 	private static final Logger log = LogManager.getLogger(LausitzSimWrapperRunner.class);
-
-	@CommandLine.Parameters(arity = "1..*", description = "Path to run output directories for which dashboards are to be generated.")
-	private List<Path> inputPaths;
-
 	@CommandLine.Mixin
 	private final ShpOptions shp = new ShpOptions();
-
+	@CommandLine.Parameters(arity = "1..*", description = "Path to run output directories for which dashboards are to be generated.")
+	private List<Path> inputPaths;
 	@CommandLine.Option(names = "--noise", defaultValue = "false", description = "create noise dashboard")
 	private boolean noise;
 	@CommandLine.Option(names = "--trips", defaultValue = "false", description = "create trips dashboard")
@@ -68,14 +65,19 @@ public final class LausitzSimWrapperRunner implements MATSimAppCommand {
 	private boolean emissions;
 
 
-	public LausitzSimWrapperRunner(){
+	public LausitzSimWrapperRunner() {
 //		public constructor needed for testing purposes.
+	}
+
+	public static void main(String[] args) {
+		new LausitzSimWrapperRunner().execute(args);
+
 	}
 
 	@Override
 	public Integer call() throws Exception {
 
-		if (!noise && !trips && !emissions){
+		if (!noise && !trips && !emissions) {
 			throw new IllegalArgumentException("you have not configured any dashboard to be created! Please use command line parameters!");
 		}
 
@@ -87,7 +89,7 @@ public final class LausitzSimWrapperRunner implements MATSimAppCommand {
 			SimWrapper sw = SimWrapper.create(config);
 
 			SimWrapperConfigGroup simwrapperCfg = ConfigUtils.addOrGetModule(config, SimWrapperConfigGroup.class);
-			if (shp.isDefined()){
+			if (shp.isDefined()) {
 				simwrapperCfg.defaultParams().shp = shp.getShapeFile();
 			}
 			//skip default dashboards
@@ -146,11 +148,6 @@ public final class LausitzSimWrapperRunner implements MATSimAppCommand {
 		}
 
 		return 0;
-	}
-
-	public static void main(String[] args) {
-		new LausitzSimWrapperRunner().execute(args);
-
 	}
 
 }

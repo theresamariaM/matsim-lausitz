@@ -22,10 +22,8 @@ import java.util.Collection;
  * All necessary configs will be made in this class.
  */
 public class LausitzSingleModeScenario extends LausitzScenario {
-	Logger log = LogManager.getLogger(LausitzSingleModeScenario.class);
-
 	private final LausitzScenario baseScenario = new LausitzScenario(sample, emissions);
-
+	Logger log = LogManager.getLogger(LausitzSingleModeScenario.class);
 	@CommandLine.Option(names = "--transport-mode", description = "Transport mode to which all legs should be changed.", defaultValue = TransportMode.car)
 	private String mode;
 

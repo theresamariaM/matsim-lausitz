@@ -31,15 +31,12 @@ import static org.matsim.application.ApplicationUtils.globFile;
 
 class EmissionAndNoiseAnalysisOutputTest {
 
+	private final static Id<Person> carPersonId = Id.createPersonId("Hoyerswerda-Cottbus_CAR");
+	private static final Config config = ConfigUtils.loadConfig(String.format("input/v%s/lausitz-v%s-10pct.config.xml", LausitzScenario.VERSION, LausitzScenario.VERSION));
 	@RegisterExtension
 	public MatsimTestUtils utils = new MatsimTestUtils();
-
 	@TempDir
 	public Path p;
-
-	private final static Id<Person> carPersonId = Id.createPersonId("Hoyerswerda-Cottbus_CAR");
-
-	private static Config config = ConfigUtils.loadConfig(String.format("input/v%s/lausitz-v%s-10pct.config.xml", LausitzScenario.VERSION, LausitzScenario.VERSION));
 
 	@Disabled("Test is used to secure functionality of emission analysis. As the analysis needs" +
 		"a lot of RAM, it is disabled and only run manually. -sme0924")
@@ -64,31 +61,27 @@ class EmissionAndNoiseAnalysisOutputTest {
 
 		Map<String, Double[]> nonZeroLinks = new HashMap<>();
 
-		try {
-			BufferedReader reader = IOUtils.getBufferedReader(csvPath.toUri().toURL());
-			String line;
+		BufferedReader reader = IOUtils.getBufferedReader(csvPath.toUri().toURL());
+		String line;
 
 //			skip header
-			reader.readLine();
+		reader.readLine();
 
-			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split(",");
+		while ((line = reader.readLine()) != null) {
+			String[] parts = line.split(",");
 
 //				if first value (CO) is zero, all others are too
-				if (Double.parseDouble(parts[1]) == 0.) {
-					continue;
-				}
-
-				Double[] values = new Double[23];
-
-				for (int i = 1; i < parts.length; i++) {
-					values[i - 1] = Double.parseDouble(parts[i]);
-				}
-
-				nonZeroLinks.put(parts[0], values);
+			if (Double.parseDouble(parts[1]) == 0.) {
+				continue;
 			}
-		} finally {
 
+			Double[] values = new Double[23];
+
+			for (int i = 1; i < parts.length; i++) {
+				values[i - 1] = Double.parseDouble(parts[i]);
+			}
+
+			nonZeroLinks.put(parts[0], values);
 		}
 
 		Assertions.assertFalse(nonZeroLinks.isEmpty());
@@ -125,32 +118,28 @@ class EmissionAndNoiseAnalysisOutputTest {
 
 		Map<String, Double> nonZeroLinks = new HashMap<>();
 
-		try {
-			BufferedReader reader = IOUtils.getBufferedReader(csvPath.toUri().toURL());
-			String line;
+		BufferedReader reader = IOUtils.getBufferedReader(csvPath.toUri().toURL());
+		String line;
 
 //			skip header
-			reader.readLine();
+		reader.readLine();
 
-			while ((line = reader.readLine()) != null) {
-				String[] parts = line.split(",");
+		while ((line = reader.readLine()) != null) {
+			String[] parts = line.split(",");
 
-				if (Double.parseDouble(parts[1]) == 0.) {
-					continue;
-				}
-
-				double value = Double.parseDouble(parts[1]);
-
-				nonZeroLinks.put(parts[0], value);
+			if (Double.parseDouble(parts[1]) == 0.) {
+				continue;
 			}
-		} finally {
 
+			double value = Double.parseDouble(parts[1]);
+
+			nonZeroLinks.put(parts[0], value);
 		}
 
 		Assertions.assertFalse(nonZeroLinks.isEmpty());
 		Assertions.assertTrue(nonZeroLinks.containsKey("28922425#0"));
 		Assertions.assertTrue(nonZeroLinks.containsKey("-686055693#1"));
-		Assertions.assertEquals(71.21, Math.round(nonZeroLinks.get("28922425#0") * 100.) / 100. , 0.001);
+		Assertions.assertEquals(71.21, Math.round(nonZeroLinks.get("28922425#0") * 100.) / 100., 0.001);
 		Assertions.assertEquals(69.72, Math.round(nonZeroLinks.get("-686055693#1") * 100.) / 100., 0.001);
 	}
 
@@ -161,12 +150,12 @@ class EmissionAndNoiseAnalysisOutputTest {
 		Plan plan = PopulationUtils.createPlan(person);
 
 //		home in hoyerswerda, nearest link 28922425#0
-		Activity home = fac.createActivityFromCoord("home_2400", new Coord(863538.13,5711028.24));
+		Activity home = fac.createActivityFromCoord("home_2400", new Coord(863538.13, 5711028.24));
 		home.setEndTime(8 * 3600);
-		Activity home2 = fac.createActivityFromCoord("home_2400", new Coord(863538.13,5711028.24));
+		Activity home2 = fac.createActivityFromCoord("home_2400", new Coord(863538.13, 5711028.24));
 		home2.setEndTime(19 * 3600);
 //		work in hoyerswerda, nearest link(s): 686055693#1, -686055693#1
-		Activity work = fac.createActivityFromCoord("work_2400", new Coord(863866.47,5710961.86));
+		Activity work = fac.createActivityFromCoord("work_2400", new Coord(863866.47, 5710961.86));
 		work.setEndTime(17 * 3600 + 25 * 60);
 
 		Leg leg = fac.createLeg(TransportMode.car);

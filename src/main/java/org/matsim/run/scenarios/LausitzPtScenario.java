@@ -65,27 +65,27 @@ public class LausitzPtScenario extends LausitzScenario {
 //		create pt network nodes
 		Node hoyerswerda = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_regio_159285.8"), new Coord(863538.8869276098, 5711014.921688189));
 		Node hoyerswerdaNeustadt = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_regio_135278.2"), new Coord(865993.0603089998, 5710758.211643816));
-		Node spremberg = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_regio_315415.7"), new Coord(873850.5174500551,5727598.197541567));
-		Node bagenz = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_short_2726.2"), new Coord(875299.1792959593,5736556.872374279));
+		Node spremberg = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_regio_315415.7"), new Coord(873850.5174500551, 5727598.197541567));
+		Node bagenz = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_short_2726.2"), new Coord(875299.1792959593, 5736556.872374279));
 		Node neuhausen = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_short_2476.2"), new Coord(874002.1110680653, 5740162.957866353));
 		Node cottbus = NetworkUtils.createAndAddNode(scenario.getNetwork(), Id.createNodeId("pt_short_5453.5"), new Coord(867315.8562388942, 5746748.406057102));
 
 //		create links first direction
 //		for speed and length deduction see internal documentation on drive
 		Link startLink1 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_0"), hoyerswerda, hoyerswerda, scenario.getNetwork(), 50., 0.1, 100000.0, 1.0);
-		Link link1 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_1"), hoyerswerda, hoyerswerdaNeustadt, scenario.getNetwork(), 2600., 2600./3*60, 100000.0, 1.0);
+		Link link1 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_1"), hoyerswerda, hoyerswerdaNeustadt, scenario.getNetwork(), 2600., 2600. / 3 * 60, 100000.0, 1.0);
 		Link link2 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_2"), hoyerswerdaNeustadt, spremberg, scenario.getNetwork(), 30000., 20., 100000.0, 1.0);
-		Link link3 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_3"), spremberg, bagenz, scenario.getNetwork(), 10000., 10000./7*60, 100000.0, 1.0);
-		Link link4 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_4"), bagenz, neuhausen, scenario.getNetwork(), 4000., 4000./4*60, 100000.0, 1.0);
-		Link link5 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_5"), neuhausen, cottbus, scenario.getNetwork(), 10000., 10000./7*60, 100000.0, 1.0);
+		Link link3 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_3"), spremberg, bagenz, scenario.getNetwork(), 10000., 10000. / 7 * 60, 100000.0, 1.0);
+		Link link4 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_4"), bagenz, neuhausen, scenario.getNetwork(), 4000., 4000. / 4 * 60, 100000.0, 1.0);
+		Link link5 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_5"), neuhausen, cottbus, scenario.getNetwork(), 10000., 10000. / 7 * 60, 100000.0, 1.0);
 
 //		create links second direction
 		Link startLink2 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_6"), cottbus, cottbus, scenario.getNetwork(), 50., 0.1, 100000.0, 1.0);
-		Link link6 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_7"), cottbus, neuhausen, scenario.getNetwork(), 10000., 10000./7*60, 100000.0, 1.0);
-		Link link7 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_8"), neuhausen, bagenz, scenario.getNetwork(), 4000., 4000./4*60, 100000.0, 1.0);
-		Link link8 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_9"), bagenz, spremberg, scenario.getNetwork(), 10000., 10000./7*60, 100000.0, 1.0);
+		Link link6 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_7"), cottbus, neuhausen, scenario.getNetwork(), 10000., 10000. / 7 * 60, 100000.0, 1.0);
+		Link link7 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_8"), neuhausen, bagenz, scenario.getNetwork(), 4000., 4000. / 4 * 60, 100000.0, 1.0);
+		Link link8 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_9"), bagenz, spremberg, scenario.getNetwork(), 10000., 10000. / 7 * 60, 100000.0, 1.0);
 		Link link9 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_10"), spremberg, hoyerswerdaNeustadt, scenario.getNetwork(), 30000., 20., 100000.0, 1.0);
-		Link link10 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_11"), hoyerswerdaNeustadt, hoyerswerda, scenario.getNetwork(), 2600., 2600./3*60, 100000.0, 1.0);
+		Link link10 = NetworkUtils.createLink(Id.createLinkId("pt_vsp_11"), hoyerswerdaNeustadt, hoyerswerda, scenario.getNetwork(), 2600., 2600. / 3 * 60, 100000.0, 1.0);
 
 		TransitSchedule schedule = scenario.getTransitSchedule();
 		TransitScheduleFactory fac = schedule.getFactory();
@@ -153,6 +153,7 @@ public class LausitzPtScenario extends LausitzScenario {
 //		TODO: add potential new Listeners here
 //		maybe a special controler for the new pt line would be handy?!
 	}
+
 	private TransitInfo configureTransitStops(List<Link> linkList, Network network, TransitSchedule schedule, TransitScheduleFactory fac, int count, Map<Link, Double> travelTimes) {
 		List<Id<Link>> links = new ArrayList<>();
 		List<TransitRouteStop> stops = new ArrayList<>();

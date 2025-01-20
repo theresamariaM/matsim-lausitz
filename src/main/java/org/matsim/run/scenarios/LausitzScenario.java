@@ -64,7 +64,7 @@ import java.util.Set;
 })
 public class LausitzScenario extends MATSimApplication {
 
-	public static final String VERSION = "2024.2-car-users-only";
+	public static final String VERSION = "2024.2";
 	public static final String FREIGHT = "longDistanceFreight";
 	public static final String HEAVY_MODE = "truck40t";
 	public static final String MEDIUM_MODE = "truck18t";
@@ -78,7 +78,7 @@ public class LausitzScenario extends MATSimApplication {
 	private static final String HBEFA_FILE_WARM_AVERAGE = HBEFA_2020_PATH + "7eff8f308633df1b8ac4d06d05180dd0c5fdf577.enc";
 
 	@CommandLine.Mixin
-	SampleOptions sample = new SampleOptions(100, 50, 20, 10, 5, 1);
+	SampleOptions sample = new SampleOptions(100, 25, 10, 1);
 
 	@CommandLine.Option(names = "--emissions", defaultValue = "PERFORM_EMISSIONS_ANALYSIS", description = "Define if emission analysis should be performed or not.")
 	EmissionAnalysisHandling emissions;
@@ -93,7 +93,7 @@ public class LausitzScenario extends MATSimApplication {
 	}
 
 	public LausitzScenario() {
-		super(String.format("input/v%s/lausitz-v%s-1pct-1.config.xml", VERSION, VERSION));
+		super(String.format("input/v%s/lausitz-v%s-1pct.config.xml", VERSION, VERSION));
 	}
 
 	public LausitzScenario(SampleOptions sample, EmissionAnalysisHandling handling) {

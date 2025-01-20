@@ -15,11 +15,11 @@ import org.matsim.testcases.MatsimTestUtils;
 import java.util.List;
 
 class PrepareDrtScenarioAgentsTest {
-	@RegisterExtension
-	private final MatsimTestUtils utils = new MatsimTestUtils();
 	private static final String URL = String.format("https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/input/v%s/",
 		LausitzScenario.VERSION);
 	private static final Id<Person> PERSON_ID = Id.createPersonId("642052");
+	@RegisterExtension
+	private final MatsimTestUtils utils = new MatsimTestUtils();
 
 	@Disabled("Test is used to secure functionality of PrepareDrtScenarioAgents. Therefore, " +
 		"it does not have to run after every commit and it is disabled and only run manually. -sme1024")

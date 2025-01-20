@@ -41,6 +41,35 @@ public class AdaptFreightTrafficToDetailedModes implements MATSimAppCommand {
 		new AdaptFreightTrafficToDetailedModes().execute(args);
 	}
 
+	private static void adaptFreightPerson(Person person) {
+		//			rename freight subpop to longDistanceFreight
+		person.getAttributes().removeAttribute("subpopulation");
+		person.getAttributes().putAttribute("subpopulation", FREIGHT);
+
+//				rename each leg mode freight to longDistanceFreight
+		for (Plan plan : person.getPlans()) {
+			for (Leg leg : TripStructureUtils.getLegs(plan)) {
+				if (leg.getMode().equals("freight")) {
+					leg.setMode(FREIGHT);
+				}
+			}
+		}
+	}
+
+	private static @NotNull Population removeSmallScaleCommercialTrafficFromPopulation(Population population) {
+		Population newPop = PopulationUtils.createPopulation(ConfigUtils.createConfig());
+
+		for (Person person : population.getPersons().values()) {
+			if (PopulationUtils.getSubpopulation(person).contains("commercialPersonTraffic")
+				|| PopulationUtils.getSubpopulation(person).contains("goodsTraffic")) {
+//				do not add commercial or goods traffic from RE
+				continue;
+			}
+			newPop.addPerson(person);
+		}
+		return newPop;
+	}
+
 	@Override
 	public Integer call() throws Exception {
 
@@ -60,7 +89,7 @@ public class AdaptFreightTrafficToDetailedModes implements MATSimAppCommand {
 			}
 
 			if (PopulationUtils.getSubpopulation(person).contains("commercialPersonTraffic") ||
-			PopulationUtils.getSubpopulation(person).contains("goodsTraffic")) {
+				PopulationUtils.getSubpopulation(person).contains("goodsTraffic")) {
 
 				Map<String, Id<VehicleType>> types = VehicleUtils.getVehicleTypes(person);
 
@@ -93,39 +122,8 @@ public class AdaptFreightTrafficToDetailedModes implements MATSimAppCommand {
 		}
 
 
-
-
 		PopulationUtils.writePopulation(population, output.toString());
 
 		return 0;
-	}
-
-	private static void adaptFreightPerson(Person person) {
-		//			rename freight subpop to longDistanceFreight
-		person.getAttributes().removeAttribute("subpopulation");
-		person.getAttributes().putAttribute("subpopulation", FREIGHT);
-
-//				rename each leg mode freight to longDistanceFreight
-		for (Plan plan : person.getPlans()) {
-			for (Leg leg : TripStructureUtils.getLegs(plan)) {
-				if (leg.getMode().equals("freight")) {
-					leg.setMode(FREIGHT);
-				}
-			}
-		}
-	}
-
-	private static @NotNull Population removeSmallScaleCommercialTrafficFromPopulation(Population population) {
-		Population newPop = PopulationUtils.createPopulation(ConfigUtils.createConfig());
-
-		for (Person person : population.getPersons().values()) {
-			if (PopulationUtils.getSubpopulation(person).contains("commercialPersonTraffic")
-			|| PopulationUtils.getSubpopulation(person).contains("goodsTraffic")) {
-//				do not add commercial or goods traffic from RE
-				continue;
-			}
-			newPop.addPerson(person);
-		}
-		return newPop;
 	}
 }

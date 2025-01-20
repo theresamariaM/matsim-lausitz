@@ -18,7 +18,7 @@ public class RunIntegrationTest {
 		assert MATSimApplication.execute(LausitzScenario.class,
 			"--1pct",
 			"--iterations", "1",
-			"--config:plans.inputPlansFile", "./input/v2024.2-car-users-only/0.1/lausitz-v2024.2-0.1-pct-plans-1.xml.gz",
+			"--config:plans.inputPlansFile", "./input/v2024.2/lausitz-v2024.2-1.0-pct-plans-1.xml.gz",
 			"--output", utils.getOutputDirectory(),
 			"--config:controller.overwriteFiles=deleteDirectoryIfExists") == 0 : "Must return non error code";
 

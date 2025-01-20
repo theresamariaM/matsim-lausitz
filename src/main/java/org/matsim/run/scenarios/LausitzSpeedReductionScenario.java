@@ -23,10 +23,8 @@ import java.util.stream.Collectors;
  * All necessary configs will be made in this class.
  */
 public class LausitzSpeedReductionScenario extends LausitzScenario {
-	Logger log = LogManager.getLogger(LausitzSpeedReductionScenario.class);
-
 	private final LausitzScenario baseScenario = new LausitzScenario(sample, emissions);
-
+	Logger log = LogManager.getLogger(LausitzSpeedReductionScenario.class);
 	@CommandLine.Option(names = "--slow-speed-shp", description = "Path to shp file for adaption of link speeds.", defaultValue = "../shp/lausitz.shp")
 	private String slowSpeedAreaShp;
 	@CommandLine.Option(names = "--slow-speed-relative-change", description = "provide a value that is bigger than 0.0 and smaller than 1.0." +

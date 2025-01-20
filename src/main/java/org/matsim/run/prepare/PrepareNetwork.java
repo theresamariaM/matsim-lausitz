@@ -23,38 +23,21 @@ import java.util.Set;
 import static org.matsim.run.scenarios.LausitzScenario.*;
 
 @CommandLine.Command(
-		name = "network",
-		description = "Prepare network / link attributes."
+	name = "network",
+	description = "Prepare network / link attributes."
 )
 public class PrepareNetwork implements MATSimAppCommand {
 
 	private static final Logger log = LogManager.getLogger(PrepareNetwork.class);
-
+	@CommandLine.ArgGroup(heading = "%nDrt options%n", exclusive = false, multiplicity = "0..1")
+	private final DrtOptions drtOpt = new DrtOptions();
 	@CommandLine.Option(names = "--network", description = "Path to network file", required = true)
 	private String networkFile;
-
 	@CommandLine.Option(names = "--output", description = "Output path of the prepared network", required = true)
 	private String outputPath;
 
-	@CommandLine.ArgGroup(heading = "%nDrt options%n", exclusive = false, multiplicity = "0..1")
-	private final DrtOptions drtOpt = new DrtOptions();
-
 	public static void main(String[] args) {
 		new PrepareNetwork().execute(args);
-	}
-
-	@Override
-	public Integer call() throws Exception {
-
-		Network network = NetworkUtils.readNetwork(networkFile);
-
-		prepareFreightNetwork(network);
-		prepareEmissionsAttributes(network);
-		prepareDrtNetwork(network, drtOpt.getDrtAreaShp());
-
-		NetworkUtils.writeNetwork(network, outputPath);
-
-		return 0;
 	}
 
 	/**
@@ -117,5 +100,19 @@ public class PrepareNetwork implements MATSimAppCommand {
 			}
 		}
 		new MultimodalNetworkCleaner(network).run(Set.of(TransportMode.drt));
+	}
+
+	@Override
+	public Integer call() throws Exception {
+
+		Network network = NetworkUtils.readNetwork(networkFile);
+
+		prepareFreightNetwork(network);
+		prepareEmissionsAttributes(network);
+		prepareDrtNetwork(network, drtOpt.getDrtAreaShp());
+
+		NetworkUtils.writeNetwork(network, outputPath);
+
+		return 0;
 	}
 }

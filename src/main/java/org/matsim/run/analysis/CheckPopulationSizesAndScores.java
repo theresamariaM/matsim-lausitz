@@ -29,11 +29,12 @@ final class CheckPopulationSizesAndScores {
 
 	public static void main(String[] args) {
 		// import original 100 pct plans
-		String pathToPopulation = "/net/ils/mersini/input/v2024.2/010.output_plans.xml.gz";
+		String pathToPopulation = "https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/lausitz-v2024.2/output/100pct/lausitz-v2024.2-100pct-base-case.output_plans.xml.gz";
 		Population population = PopulationUtils.readPopulation(pathToPopulation);
 		int populationSize = population.getPersons().size();
-		log.info("Size of Output_plans with all agents (not reduced to only car users): {}", populationSize);
-
+		log.info("Size of lausitz-v2024.2-100pct-base-case.output_plans.xml.gz (not reduced to only car users): {}", populationSize);
+		double avg0 = calculateAverageScoreOfSelectedPlan(population);
+		log.info(" Average scores of selected Plans of lausitz-v2024.2-100pct-base-case.output_plans.xml.gz: {}", avg0);
 
 		// reduce to car users only
 		List<Id<Person>> nonCarUsers = new ArrayList<>();
@@ -67,8 +68,7 @@ final class CheckPopulationSizesAndScores {
 			population.removePerson(personId);
 		}
 		int newPopulationSize = population.getPersons().size();
-		log.info(" Size of Car Users only of Output Plans: {} ", newPopulationSize);
-
+		log.info("Size of lausitz-v2024.2-100pct-base-case.output_plans.xml.gz reduced to car users only: {} ", newPopulationSize);
 
 		// calculate average score of selected Plans
 		double avg = calculateAverageScoreOfSelectedPlan(population);
@@ -80,11 +80,10 @@ final class CheckPopulationSizesAndScores {
 
 
 		// Import created 100 pct plans
-		String pathToCarPopulation = "/net/ils/mersini/input/v2024.2/lausitz-v2024.2-100-pct-plans.xml.gz";
+		String pathToCarPopulation = "/net/ils/mersini/input/v2024.2/lausitz-v2024.2-100.0-pct-plans.xml.gz";
 		Population populationCarUsers = PopulationUtils.readPopulation(pathToCarPopulation);
 		int populationSizeCarUsers = populationCarUsers.getPersons().size();
 		log.info(" Size of Population 100 Pct Car Users: {}", populationSizeCarUsers);
-
 
 		// calculate average score
 		double avg2 = calculateAverageScoreOfSelectedPlan(populationCarUsers);
@@ -94,29 +93,48 @@ final class CheckPopulationSizesAndScores {
 		double avgOfAvg = calculateAvgOfAvgOfPersPlans(populationCarUsers);
 		log.info(" Average scores of average Scores of Plans of created 100 pct plans (from *100-pct-plans.xml.gz): {}", avgOfAvg);
 
-		// Calculate average of experienced plans
-		String pathToPlansIt0Exp = "/net/ils/mersini/output/output-lausitz-100pct/ITERS/it.0/lausitz-100pct.0.experienced_plans.xml.gz";
-		Population pop0Exp = PopulationUtils.readPopulation(pathToPlansIt0Exp);
-		int pop0ExpSize = pop0Exp.getPersons().size();
-		log.info("Size of it.0/lausitz-100pct.0.experienced_plans.xml.gz: {}", pop0ExpSize);
+		// Import 50, 25, 10, 5 and 1 and check Sizes and calculate their average Score
+		double[] sampleSizes = {100.0, 50.0, 25.0, 10.0, 5.0, 1.0};
+		for (double sampleSize : sampleSizes) {
+			String inputPath1 = "/net/ils/mersini/input/v2024.2/lausitz-v2024.2-";
+			String inputPath2 = "-pct-plans.xml.gz";
+			if (sampleSize == 10.0 || sampleSize == 5.0 || sampleSize == 1.0) {
+				for (int sample_nr = 1; sample_nr < 11; sample_nr++) {
+					// Path to Population
+					String pathToSampledPopulation = inputPath1 + sampleSize + "-pct-plans-" + Double.toString(sample_nr) + ".xml.gz";
+					writeSizeAndAverageOfSelPlanToLog(pathToSampledPopulation, sampleSize);
 
-		int number_of_empty_plansIt0Exp1 = 0;
-		ArrayList<Double> scoresExpPlans1 = new ArrayList<>();
-		for (Person person : pop0Exp.getPersons().values()) {
-			try {
-				Plan plan = person.getPlans().get(0);
-				scoresExpPlans1.add(plan.getScore());
+				}
+			} else if (sampleSize == 25.0) {
+				// import regular 25 pct
+				String pathToSampledPopulation = inputPath1 + sampleSize + inputPath2;
+				writeSizeAndAverageOfSelPlanToLog(pathToSampledPopulation, sampleSize);
 
-			} catch (NullPointerException e) {
-				number_of_empty_plansIt0Exp1 += 1;
+				// import doubled 25 pct file
+				String pathTo25PctDoubled = inputPath1 + sampleSize + "-pct-plans-doubled.xml.gz";
+				writeSizeAndAverageOfSelPlanToLog(pathTo25PctDoubled, sampleSize);
+
+				// import quadrupled 25 pct file
+				String pathTo25PctQuadrupled = inputPath1 + sampleSize + "-pct-plans-quadrupled.xml.gz";
+				writeSizeAndAverageOfSelPlanToLog(pathTo25PctQuadrupled, sampleSize);
+			} else {
+				// import plans file
+				String pathToSampledPopulation = inputPath1 + sampleSize + inputPath2;
+				writeSizeAndAverageOfSelPlanToLog(pathToSampledPopulation, sampleSize);
+
 			}
 
-
 		}
-		double avgExpPlan1 = calculateAverage(scoresExpPlans1);
 
-		log.info(" Overall Average Score from Experienced Plans at It 0, 100 pct: {} ", avgExpPlan1);
 
+	}
+
+	private static void writeSizeAndAverageOfSelPlanToLog(String pathToPopulation, double SampleSize) {
+		Population pop = PopulationUtils.readPopulation(pathToPopulation);
+		int popSize = pop.getPersons().size();
+		log.info("Population Size: {} of  Sample Size {}", popSize, SampleSize);
+		double avgOfSelPlan = calculateAverageScoreOfSelectedPlan(pop);
+		log.info("Average of Selected Plans: {}", avgOfSelPlan);
 	}
 
 

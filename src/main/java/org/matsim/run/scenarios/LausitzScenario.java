@@ -78,7 +78,7 @@ public class LausitzScenario extends MATSimApplication {
 	private static final String HBEFA_FILE_WARM_AVERAGE = HBEFA_2020_PATH + "7eff8f308633df1b8ac4d06d05180dd0c5fdf577.enc";
 
 	@CommandLine.Mixin
-	SampleOptions sample = new SampleOptions(100, 25, 10, 1);
+	SampleOptions sample = new SampleOptions(100, 25, 10, 5, 1);
 
 	@CommandLine.Option(names = "--emissions", defaultValue = "PERFORM_EMISSIONS_ANALYSIS", description = "Define if emission analysis should be performed or not.")
 	EmissionAnalysisHandling emissions;
@@ -93,7 +93,7 @@ public class LausitzScenario extends MATSimApplication {
 	}
 
 	public LausitzScenario() {
-		super(String.format("input/v%s/lausitz-v%s-1pct.config.xml", VERSION, VERSION));
+		super(String.format("input/v%s/lausitz-v%s.config.xml", VERSION, VERSION));
 	}
 
 	public LausitzScenario(SampleOptions sample, EmissionAnalysisHandling handling) {
@@ -219,9 +219,9 @@ public class LausitzScenario extends MATSimApplication {
 			config.controller().setOutputDirectory(sample.adjustName(config.controller().getOutputDirectory()));
 			config.plans().setInputFile(sample.adjustName(config.plans().getInputFile()));
 			config.controller().setRunId(sample.adjustName(config.controller().getRunId()));
-
-			config.qsim().setFlowCapFactor(sample.getSample());
-			config.qsim().setStorageCapFactor(sample.getSample());
+			// TM: not necessary in this case altered in config
+			//config.qsim().setFlowCapFactor(sample.getSample());
+			//config.qsim().setStorageCapFactor(sample.getSample());
 			config.counts().setCountsScaleFactor(sample.getSample());
 
 			simWrapper.sampleSize = sample.getSample();

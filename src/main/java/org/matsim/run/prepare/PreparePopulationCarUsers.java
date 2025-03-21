@@ -1,15 +1,13 @@
 package org.matsim.run.prepare;
 
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.Scenario;
-// import org.apache.logging.log4j.LogManager;
-// import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.*;
+import org.matsim.core.population.PopulationUtils;
 import org.matsim.core.router.TripStructureUtils;
-import org.matsim.core.config.Config;
-import org.matsim.core.config.ConfigUtils;
-import org.matsim.core.scenario.ScenarioUtils;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +18,18 @@ import java.util.List;
  */
 
 final class PreparePopulationCarUsers {
+	private static final Logger log = LogManager.getLogger(PreparePopulationCarUsers.class);
+
 	private PreparePopulationCarUsers() {
 		//not called
 	}
 
-	// private static final Logger log = LogManager.getLogger(PreparePopulationCarUsers.class);
+
 	public static void main(String[] args) {
-		final String outputFilePopulation = "./input/v2024.2/lausitz-v2024.2-100-pct-plans.xml.gz";
-		Config config = ConfigUtils.loadConfig("./input/v2024.2/lausitz-v2024.2-100pct.config.xml");
-		Scenario scenario = ScenarioUtils.loadScenario(config);
-		Population population = scenario.getPopulation();
+		final String outputFilePopulation = "./input/v2024.2/lausitz-v2024.2-100.0-pct-plans.xml.gz";
+		String pathToPopulation = "https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/lausitz-v2024.2/output/100pct/lausitz-v2024.2-100pct-base-case.output_plans.xml.gz";
+		Population population = PopulationUtils.readPopulation(pathToPopulation);
+
 		List<Id<Person>> nonCarUsers = new ArrayList<>();
 		List<Id<Person>> notAPerson = new ArrayList<>();
 
@@ -61,9 +61,8 @@ final class PreparePopulationCarUsers {
 		for (Id<Person> personId : notAPerson) {
 			population.removePerson(personId);
 		}
-
-		new PopulationWriter(population, scenario.getNetwork()).write(outputFilePopulation);
-		// log.info("Population written to:" + outputFilePopulation);
+		PopulationUtils.writePopulation(population, outputFilePopulation);
+		log.info("Population written to: {}" + outputFilePopulation);
 
 
 	}

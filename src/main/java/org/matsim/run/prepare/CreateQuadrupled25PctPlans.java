@@ -14,43 +14,26 @@ import java.util.List;
  * Create doubled and quadrupled 25 percent plans.
  */
 
-final class CreateDoubledAndQuadrupled25PctPlans {
+final class CreateQuadrupled25PctPlans {
 
-	private static final Logger log = LogManager.getLogger(CreateDoubledAndQuadrupled25PctPlans.class);
+	private static final Logger log = LogManager.getLogger(CreateQuadrupled25PctPlans.class);
 
-	private CreateDoubledAndQuadrupled25PctPlans() {
+	private CreateQuadrupled25PctPlans() {
 		// not called
 	}
 
 	public static void main(String[] args) {
-		// Create doubled and quadrupled Versions of the 25 percent plans
-		String[] sampleSizes = {"doubled", "quadrupled"};
-		for (String size : sampleSizes) {
-			if (size.equals("doubled")) {
-				// create doubled
-				// Inputs
-				String inputFilePopulation = "./input/v2024.2/lausitz-v2024.2-25.0-pct-plans.xml.gz";
+		// Create  quadrupled Versions of the 25 percent plans
+		// Inputs
+		String inputFilePopulation = "./input/v2024.2/lausitz-v2024.2-25.0-pct-plans-doubled.xml.gz";
+		// Output Path
+		String outputFilePopulation = "./input/v2024.2/lausitz-v2024.2-25.0-pct-plans-quadrupled.xml.gz";
+		clonePlansAndWritePopulation(inputFilePopulation, outputFilePopulation, "q");
 
-
-				// Output Path
-				String outputFilePopulation = "./input/v2024.2/lausitz-v2024.2-25.0-pct-plans-" + size + ".xml.gz";
-				clonePlansAndWritePopulation(inputFilePopulation, outputFilePopulation);
-
-
-			} else {
-				// create quadrupled
-				// Inputs
-				String inputFilePopulation = "./input/v2024.2/lausitz-v2024.2-25.0-pct-plans-doubled.xml.gz";
-				// Output Path
-				String outputFilePopulation = "./input/v2024.2/lausitz-v2024.2-25.0-plans-" + size + ".xml.gz";
-				clonePlansAndWritePopulation(inputFilePopulation, outputFilePopulation);
-
-			}
-
-		}
 	}
 
-	private static void clonePlansAndWritePopulation(String inputPath, String outputPath) {
+
+	private static void clonePlansAndWritePopulation(String inputPath, String outputPath, String idAddOn) {
 		// Load Inputs and create populationFactory
 		Population population = PopulationUtils.readPopulation(inputPath);
 		PopulationFactory populationFactory = population.getFactory();
@@ -65,7 +48,7 @@ final class CreateDoubledAndQuadrupled25PctPlans {
 			Person person = population.getPersons().get(personId);
 
 			if (person != null) {
-				Person personCloned = populationFactory.createPerson(Id.create(personId + "c", Person.class));
+				Person personCloned = populationFactory.createPerson(Id.create(personId + idAddOn, Person.class));
 
 				for (String attribute : person.getAttributes().getAsMap().keySet()) {
 					personCloned.getAttributes().putAttribute(attribute, person.getAttributes().getAttribute(attribute));
@@ -86,6 +69,5 @@ final class CreateDoubledAndQuadrupled25PctPlans {
 		PopulationUtils.writePopulation(population, outputPath);
 
 	}
-
 
 }

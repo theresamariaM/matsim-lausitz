@@ -101,7 +101,7 @@ final class CheckPopulationSizesAndScores {
 			if (sampleSize == 10.0 || sampleSize == 5.0 || sampleSize == 1.0) {
 				for (int sample_nr = 1; sample_nr < 11; sample_nr++) {
 					// Path to Population
-					String pathToSampledPopulation = inputPath1 + sampleSize + "-pct-plans-" + Double.toString(sample_nr) + ".xml.gz";
+					String pathToSampledPopulation = inputPath1 + sampleSize + "-pct-plans-" + sample_nr + ".xml.gz";
 					writeSizeAndAverageOfSelPlanToLog(pathToSampledPopulation, sampleSize);
 
 				}
@@ -129,10 +129,10 @@ final class CheckPopulationSizesAndScores {
 
 	}
 
-	private static void writeSizeAndAverageOfSelPlanToLog(String pathToPopulation, double SampleSize) {
+	private static void writeSizeAndAverageOfSelPlanToLog(String pathToPopulation, double sampleSize) {
 		Population pop = PopulationUtils.readPopulation(pathToPopulation);
 		int popSize = pop.getPersons().size();
-		log.info("Population Size: {} of  Sample Size {}", popSize, SampleSize);
+		log.info("Population Size: {} of  Sample Size {}", popSize, sampleSize);
 		double avgOfSelPlan = calculateAverageScoreOfSelectedPlan(pop);
 		log.info("Average of Selected Plans: {}", avgOfSelPlan);
 	}

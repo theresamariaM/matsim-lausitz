@@ -31,7 +31,7 @@ final class CreatePopulationSamples {
 			if (sampleSize == 0.01 || sampleSize == 0.05 || sampleSize == 0.1) {
 				for (int i = 1; i <= 10; i++) {
 
-					String pathToPopulation = "./input/v2024.2/lausitz-v2024.2-100-pct-plans.xml.gz";
+					String pathToPopulation = "./input/v2024.2/lausitz-v2024.2-100.0-pct-plans.xml.gz";
 					Population population = PopulationUtils.readPopulation(pathToPopulation);
 					PopulationUtils.sampleDown(population, sampleSize);
 					int sampleSizeInPct = (int) (sampleSize * 100);
@@ -48,7 +48,7 @@ final class CreatePopulationSamples {
 				int sampleSizeInPct = (int) (sampleSize * 100);
 				String sampleSizeString = Double.toString(sampleSizeInPct);
 				String outputFilePopulation = outputFilePopulationPart1 + sampleSizeString + outputFilePopulationPart2 + outputFilePopulationPart3;
-				String pathToPopulation = "./input/v2024.2/lausitz-v2024.2-100-pct-plans.xml.gz";
+				String pathToPopulation = "./input/v2024.2/lausitz-v2024.2-100.0-pct-plans.xml.gz";
 				Population population = PopulationUtils.readPopulation(pathToPopulation);
 				PopulationUtils.sampleDown(population, sampleSize);
 				log.info("Writing {} sample to {}", sampleSize, outputFilePopulation);

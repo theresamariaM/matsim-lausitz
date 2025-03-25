@@ -1,4 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<parent>
@@ -8,11 +8,12 @@
 		<!-- release -->
 		<!-- <version>13.0</version> -->
 
-		<!-- PR-labelled release -->
-		<!--<version>14.0-PR1452</version>-->
+		<!-- PR-labelled release 2025.0-PR3770 -->
+
+		<version>2025.0-PR3765</version>
 
 		<!-- snapshot == not recommended: rather use PR-labelled release!-->
-		<version>2025.0-PR3515</version>
+		<!--<version>2025.0-PR3515</version>-->
 	</parent>
 
 
@@ -111,7 +112,10 @@
 		<dependency>
 			<groupId>com.github.matsim-org</groupId>
 			<artifactId>gtfs2matsim</artifactId>
-			<version>master-33809c4f0f-1</version>
+			<!-- 45689bf834 -->
+			<version>45689bf834</version>
+			<!--  <version>master-33809c4f0f-1</version> -->
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.matsim</groupId>

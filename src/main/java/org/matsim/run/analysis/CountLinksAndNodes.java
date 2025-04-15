@@ -8,8 +8,8 @@ public class CountLinksAndNodes {
 		// Path to Network
 		String pathToNetwork = "https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/lausitz-v2024.2/input/lausitz-v2024.2-network-with-pt.xml.gz";
 		Network network = NetworkUtils.readNetwork(pathToNetwork);
-		Integer numberOfLinks = network.getLinks().size();
-		Integer numberOfNodes = network.getNodes().size();
+		int numberOfLinks = network.getLinks().size();
+		int numberOfNodes = network.getNodes().size();
 		System.out.println("Number of links: " + numberOfLinks);
 		System.out.println("Number of nodes: " + numberOfNodes);
 

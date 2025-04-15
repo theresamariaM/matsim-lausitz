@@ -10,8 +10,17 @@ import org.matsim.core.population.PopulationUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CountAgentsAndFreightSubpopulation {
+/**
+ * Count agents and freight agents.
+ */
+
+
+final class CountAgentsAndFreightSubpopulation {
 	private static final Logger log = LogManager.getLogger(CountAgentsAndFreightSubpopulation.class);
+
+	private CountAgentsAndFreightSubpopulation() {
+		// not callec;
+	}
 
 	public static void main(String[] args) {
 		String pathToPopulation = "https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/lausitz-v2024.2/output/100pct/lausitz-v2024.2-100pct-base-case.output_plans.xml.gz";

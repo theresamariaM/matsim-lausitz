@@ -88,10 +88,10 @@ final class CheckNonCarPlans {
 		List<Id<Person>> numberOfAgentsWithNonCarPlans = numberOfNonCarPlans.stream().distinct().toList();
 		int nAgentsWithNonCarPlans = numberOfAgentsWithNonCarPlans.size();
 		int ratio = nAgentsWithNonCarPlans / nAgents;
-		LOG.info("Number of Agents in Population: {}" + nAgents);
-		LOG.info("Number of Agents with non Car Plans: {}" + nAgentsWithNonCarPlans);
-		LOG.info("Number of Non Car Plans: {}" + nNonCarPlans);
-		LOG.info("Ratio of Agents with non Car Plans to Agents in Population: {}" + ratio);
+		LOG.info("Number of Agents in Population: {}", nAgents);
+		LOG.info("Number of Agents with non Car Plans: {}", nAgentsWithNonCarPlans);
+		LOG.info("Number of Non Car Plans: {}", nNonCarPlans);
+		LOG.info("Ratio of Agents with non Car Plans to Agents in Population: {}", ratio);
 
 	}
 

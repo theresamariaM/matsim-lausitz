@@ -68,9 +68,8 @@ final class CheckNonCarPlans {
 		Population population = PopulationUtils.readPopulation(pathToPlans);
 		List<Id<Person>> numberOfNonCarPlans = new ArrayList<>();
 		for (Person person : population.getPersons().values()) {
-			boolean containsCarLeg = false;
 			for (Plan plan : person.getPlans()) {
-
+				boolean containsCarLeg = false;
 				for (Leg leg : TripStructureUtils.getLegs(plan)) {
 					if (TransportMode.car.equals(leg.getMode())) {
 						containsCarLeg = true;
@@ -87,7 +86,7 @@ final class CheckNonCarPlans {
 		int nAgents = population.getPersons().size();
 		List<Id<Person>> numberOfAgentsWithNonCarPlans = numberOfNonCarPlans.stream().distinct().toList();
 		int nAgentsWithNonCarPlans = numberOfAgentsWithNonCarPlans.size();
-		int ratio = nAgentsWithNonCarPlans / nAgents;
+		float ratio = nAgentsWithNonCarPlans / nAgents;
 		LOG.info("Number of Agents in Population: {}", nAgents);
 		LOG.info("Number of Agents with non Car Plans: {}", nAgentsWithNonCarPlans);
 		LOG.info("Number of Non Car Plans: {}", nNonCarPlans);

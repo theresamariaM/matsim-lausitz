@@ -67,6 +67,7 @@ final class CheckNonCarPlans {
 	private static void countNumberOfNonCarPlans(String pathToPlans) {
 		Population population = PopulationUtils.readPopulation(pathToPlans);
 		List<Id<Person>> numberOfNonCarPlans = new ArrayList<>();
+		List<Id<Person>> numberOfAgentsWithNonCarPlans = new ArrayList<>();
 		for (Person person : population.getPersons().values()) {
 			for (Plan plan : person.getPlans()) {
 				boolean containsCarLeg = false;
@@ -79,12 +80,13 @@ final class CheckNonCarPlans {
 				if (!containsCarLeg) {
 					numberOfNonCarPlans.add(person.getId());
 				}
+				if (!numberOfAgentsWithNonCarPlans.contains(person.getId()) && !containsCarLeg)
+					numberOfAgentsWithNonCarPlans.add(person.getId());
 			}
 
 		}
 		int nNonCarPlans = numberOfNonCarPlans.size();
 		int nAgents = population.getPersons().size();
-		List<Id<Person>> numberOfAgentsWithNonCarPlans = numberOfNonCarPlans.stream().distinct().toList();
 		int nAgentsWithNonCarPlans = numberOfAgentsWithNonCarPlans.size();
 		double ratio = (double) nAgentsWithNonCarPlans / (double) nAgents;
 		LOG.info("Number of Agents in Population: {}", nAgents);

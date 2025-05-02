@@ -40,7 +40,7 @@ final class CheckNonCarPlans {
 			if (sampleSize == 10.0 || sampleSize == 5.0 || sampleSize == 1.0) {
 				for (int sample_nr = 1; sample_nr < 11; sample_nr++) {
 					// Path to Population
-					String outputPathFile = outputPath + "-" + sampleSize + "-pct-plans-" + sample_nr + "-AgentsWithNonCarPlans.csv";
+					String outputPathFile = outputPath + sampleSize + "-pct-plans-" + sample_nr + "-AgentsWithNonCarPlans.csv";
 					String pathToSampledPopulation = inputPath1 + sampleSize + "-pct-plans-" + sample_nr + ".xml.gz";
 					countNumberOfNonCarPlans(pathToSampledPopulation, outputPathFile);
 
@@ -48,19 +48,19 @@ final class CheckNonCarPlans {
 			} else if (sampleSize == 25.0) {
 				// import regular 25 pct
 				String pathToSampledPopulation = inputPath1 + sampleSize + inputPath2;
-				String outputPathFile1 = outputPath + "-" + sampleSize + "-pct-plans-AgentsWithNonCarPlans.csv";
+				String outputPathFile1 = outputPath + sampleSize + "-pct-plans-AgentsWithNonCarPlans.csv";
 				countNumberOfNonCarPlans(pathToSampledPopulation, outputPathFile1);
 				// import doubled 25 pct file
-				String outputPathFile2 = outputPath + "-" + sampleSize + "-pct-plans-doubled-AgentsWithNonCarPlans.csv";
+				String outputPathFile2 = outputPath + sampleSize + "-pct-plans-doubled-AgentsWithNonCarPlans.csv";
 				String pathTo25PctDoubled = inputPath1 + sampleSize + "-pct-plans-doubled.xml.gz";
 				countNumberOfNonCarPlans(pathTo25PctDoubled, outputPathFile2);
 				// import quadrupled 25 pct file
-				String outputPathFile3 = outputPath + "-" + sampleSize + "-pct-plans-quadrupled-AgentsWithNonCarPlans.csv";
+				String outputPathFile3 = outputPath + sampleSize + "-pct-plans-quadrupled-AgentsWithNonCarPlans.csv";
 				String pathTo25PctQuadrupled = inputPath1 + sampleSize + "-pct-plans-quadrupled.xml.gz";
 				countNumberOfNonCarPlans(pathTo25PctQuadrupled, outputPathFile3);
 			} else {
 				// import plans file
-				String outputPathFile = outputPath + "-" + sampleSize + "-pct-plans-AgentsWithNonCarPlans.csv";
+				String outputPathFile = outputPath + sampleSize + "-pct-plans-AgentsWithNonCarPlans.csv";
 				String pathToSampledPopulation = inputPath1 + sampleSize + inputPath2;
 				countNumberOfNonCarPlans(pathToSampledPopulation, outputPathFile);
 

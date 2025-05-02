@@ -103,10 +103,11 @@ final class CheckNonCarPlans {
 		try {
 			BufferedWriter file = new BufferedWriter(new FileWriter(outputPathFile));
 			file.write("Id\n");
-			for (Id<Person> personId : numberOfAgentsWithNonCarPlans) {
+			for (Id<Person> personId : numberOfNonCarPlans) {
 				file.write(personId.toString() + "\n");
-				file.close();
+
 			}
+			file.close();
 		} catch (IOException exep) {
 			LOG.info("could not create csv file");
 		}

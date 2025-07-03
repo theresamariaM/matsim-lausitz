@@ -37,11 +37,13 @@ public class CountLinksByRoadType {
 		for (Link link : network.getLinks().values()) {
 			if (link.getAttributes().getAttribute("type") == null) {
 				AttributeIsNull++;
-				continue;
+
 			}
-			linkTypes.add(link.getAttributes().getAttribute("type").toString());
+			//linkTypes.add(link.getAttributes().getAttribute("type").toString());
 			if (link.getId().toString().startsWith("pt_")) {
 				numberOfPtLinks++;
+
+
 			} else if (link.getAttributes().getAttribute("type").toString().startsWith("highway.motorway")) {
 				numberOfMotorways++;
 
@@ -57,7 +59,7 @@ public class CountLinksByRoadType {
 
 			} else if (link.getAttributes().getAttribute("type").toString().startsWith("highway.residential")) {
 				numberOfResidential++;
-			} else if (link.getAttributes().getAttribute("type").toString().startsWith("trunk")) {
+			} else if (link.getAttributes().getAttribute("type").toString().startsWith("highway.trunk")) {
 				numberOfTrunk++;
 			} else if (link.getAttributes().getAttribute("type").toString().startsWith("highway.unclassified")) {
 				numberOfUnclassified++;
@@ -83,7 +85,8 @@ public class CountLinksByRoadType {
 				file.close();
 			}
 			BufferedWriter file = new BufferedWriter(new FileWriter(outputPathFile1));
-			file.write("numberOfLinks" + "," + numberOfLinks + "\n");
+			file.write("Type" + "," + "N" + "\n");
+			file.write("All" + "," + numberOfLinks + "\n");
 			file.write("numberOfMotorways" + "," + numberOfMotorways + "\n");
 			file.write("numberOfPrimary" + "," + numberOfPrimary + "\n");
 			file.write("numberOfSecondary" + "," + numberOfSecondary + "\n");

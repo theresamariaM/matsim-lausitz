@@ -14,7 +14,12 @@ import org.matsim.vehicles.VehicleUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CreateQuadrupledPlansV2 {
+
+/**
+ * Create quadrupled plans.
+ */
+
+final class CreateQuadrupledPlansV2 {
 	private static final Logger log = LogManager.getLogger(CreateQuadrupledPlansV2.class);
 
 	private CreateQuadrupledPlansV2() {

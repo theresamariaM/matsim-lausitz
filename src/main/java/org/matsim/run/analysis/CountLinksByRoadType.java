@@ -9,30 +9,45 @@ import org.matsim.core.network.NetworkUtils;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 
-public class CountLinksByRoadType {
+/**
+ * Count links by road type.
+ */
+
+final class CountLinksByRoadType {
 	public static final Logger LOG = LogManager.getLogger(CountLinksByRoadType.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		String pathToNetwork = "https://svn.vsp.tu-berlin.de/repos/public-svn/matsim/scenarios/countries/de/lausitz/lausitz-v2024.2/input/lausitz-v2024.2-network-with-pt.xml.gz";
-		String outputPathFile1 = "/home/lola/Nextcloud/Masterarbeit/03_Outputs/Lausitz_Number_of_Links_by_Road_Type.csv";
-		String outputPathFile2 = "/home/lola/Nextcloud/Masterarbeit/03_Outputs/Lausitz_Road_Types.csv";
+		String outputPathFile1 = "/net/ils/mersini/output/CheckNonCarPlans/Lausitz_Number_of_Links_by_Road_Type.csv";
 		Network network = NetworkUtils.readNetwork(pathToNetwork);
-		int numberOfPtLinks = 0;
-		int numberOfMotorways = 0;
-		int numberOfPrimary = 0;
-		int numberOfSecondary = 0;
-		int numberOfTertiary = 0;
-		int numberOfLivingStreets = 0;
-		int numberOfResidential = 0;
-		int numberOfTrunk = 0;
-		int numberOfUnclassified = 0;
-		int numberOfService = 0;
-		int AttributeIsNull = 0;
-		int numberOfLinks = network.getLinks().size();
-		ArrayList<String> linkTypes = new ArrayList<String>();
+		HashMap<String, Integer> counts = countLinkTypes(network);
+		try {
+			writeLinkTypesAndFreqToFile(counts, outputPathFile1);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+
+	}
+
+
+	private static HashMap<String, Integer> countLinkTypes(Network network) {
+		HashMap<String, Integer> linkTypesAndTheirFrequency = new HashMap<>();
+		Integer numberOfPtLinks = 0;
+		Integer numberOfMotorways = 0;
+		Integer numberOfPrimary = 0;
+		Integer numberOfSecondary = 0;
+		Integer numberOfTertiary = 0;
+		Integer numberOfLivingStreets = 0;
+		Integer numberOfResidential = 0;
+		Integer numberOfTrunk = 0;
+		Integer numberOfUnclassified = 0;
+		Integer numberOfService = 0;
+		Integer AttributeIsNull = 0;
+		Integer numberOfLinks = network.getLinks().size();
 
 		for (Link link : network.getLinks().values()) {
 			if (link.getAttributes().getAttribute("type") == null) {
@@ -67,45 +82,47 @@ public class CountLinksByRoadType {
 				numberOfService++;
 			}
 
+
 		}
+		linkTypesAndTheirFrequency.put("numberOfPtLinks", numberOfPtLinks);
+		linkTypesAndTheirFrequency.put("numberOfMotorways", numberOfMotorways);
+		linkTypesAndTheirFrequency.put("numberOfPrimary", numberOfPrimary);
+		linkTypesAndTheirFrequency.put("numberOfSecondary", numberOfSecondary);
+		linkTypesAndTheirFrequency.put("numberOfTertiary", numberOfTertiary);
+		linkTypesAndTheirFrequency.put("numberOfLivingStreets", numberOfLivingStreets);
+		linkTypesAndTheirFrequency.put("numberOfResidential", numberOfResidential);
+		linkTypesAndTheirFrequency.put("numberOfTrunk", numberOfTrunk);
+		linkTypesAndTheirFrequency.put("numberOfUnclassified", numberOfUnclassified);
+		linkTypesAndTheirFrequency.put("numberOfService", numberOfService);
+		linkTypesAndTheirFrequency.put("AttributeIsNull", AttributeIsNull);
+		linkTypesAndTheirFrequency.put("numberOfLinks", numberOfLinks);
+
+		return linkTypesAndTheirFrequency;
+	}
+
+	public static void writeLinkTypesAndFreqToFile(HashMap<String, Integer> linkTypesAndTheirFrequency, String outputPath) throws IOException {
 		try {
-			ArrayList<String> uniqueRoadTypes = new ArrayList<>();
-
-			for (String linkType : linkTypes) {
-				if (!uniqueRoadTypes.contains(linkType)) {
-					uniqueRoadTypes.add(linkType);
-
-				}
-				BufferedWriter file = new BufferedWriter(new FileWriter(outputPathFile2));
-				file.write("Road_Type" + "\n");
-				for (String uniqueRoadType : uniqueRoadTypes) {
-					file.write(uniqueRoadType + "\n");
-
-				}
-				file.close();
-			}
-			BufferedWriter file = new BufferedWriter(new FileWriter(outputPathFile1));
+			BufferedWriter file = new BufferedWriter(new FileWriter(outputPath));
 			file.write("Type" + "," + "N" + "\n");
-			file.write("All" + "," + numberOfLinks + "\n");
-			file.write("numberOfMotorways" + "," + numberOfMotorways + "\n");
-			file.write("numberOfPrimary" + "," + numberOfPrimary + "\n");
-			file.write("numberOfSecondary" + "," + numberOfSecondary + "\n");
-			file.write("numberOfTertiary" + "," + numberOfTertiary + "\n");
-			file.write("numberOfLivingStreets" + "," + numberOfLivingStreets + "\n");
-			file.write("numberOfResidential" + "," + numberOfResidential + "\n");
-			file.write("numberOfTrunk" + "," + numberOfTrunk + "\n");
-			file.write("numberOfService" + "," + numberOfService + "\n");
-			file.write("numberOfUnclassified" + "," + numberOfUnclassified + "\n");
-			file.write("numberOfPtLinks" + "," + numberOfPtLinks + "\n");
-			file.write("numberOfAttributeIsNull" + "," + AttributeIsNull + "\n");
+			file.write("All" + "," + linkTypesAndTheirFrequency.get("numberOfLinks") + "\n");
+			file.write("numberOfMotorways" + "," + linkTypesAndTheirFrequency.get("numberOfMotorways") + "\n");
+			file.write("numberOfPrimary" + "," + linkTypesAndTheirFrequency.get("numberOfPrimary") + "\n");
+			file.write("numberOfSecondary" + "," + linkTypesAndTheirFrequency.get("numberOfSecondary") + "\n");
+			file.write("numberOfTertiary" + "," + linkTypesAndTheirFrequency.get("numberOfTertiary") + "\n");
+			file.write("numberOfLivingStreets" + "," + linkTypesAndTheirFrequency.get("numberOfLivingStreets") + "\n");
+			file.write("numberOfResidential" + "," + linkTypesAndTheirFrequency.get("numberOfResidential") + "\n");
+			file.write("numberOfTrunk" + "," + linkTypesAndTheirFrequency.get("numberOfTrunk") + "\n");
+			file.write("numberOfService" + "," + linkTypesAndTheirFrequency.get("numberOfService") + "\n");
+			file.write("numberOfUnclassified" + "," + linkTypesAndTheirFrequency.get("numberOfUnclassified") + "\n");
+			file.write("numberOfPtLinks" + "," + linkTypesAndTheirFrequency.get("numberOfPtLinks") + "\n");
+			file.write("numberOfAttributeIsNull" + "," + linkTypesAndTheirFrequency.get("AttributeIsNull") + "\n");
 
 
 			file.close();
-		} catch (IOException exep) {
+		} catch (IOException exception) {
 			LOG.info("could not create csv file");
 		}
 
 	}
-
 
 }

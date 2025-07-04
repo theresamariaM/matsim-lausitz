@@ -4,10 +4,8 @@ package org.matsim.run.prepare;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.matsim.api.core.v01.Id;
-import org.matsim.api.core.v01.TransportMode;
 import org.matsim.api.core.v01.population.*;
 import org.matsim.core.population.PopulationUtils;
-import org.matsim.core.population.routes.RouteFactory;
 import org.matsim.utils.objectattributes.attributable.AttributesUtils;
 import org.matsim.vehicles.PersonVehicles;
 import org.matsim.vehicles.Vehicle;
@@ -18,7 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CreateDoubledPlansV2 {
+/**
+ * Create doubled plans.
+ */
+
+
+final class CreateDoubledPlansV2 {
 	private static final Logger log = LogManager.getLogger(CreateDoubledPlansV2.class);
 
 	private CreateDoubledPlansV2() {
